@@ -138,6 +138,7 @@
     <Compile Include="Assets\Scripts\MapDisplay.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Noise.cs" />
+    <Compile Include="Assets\Scripts\TextureGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />

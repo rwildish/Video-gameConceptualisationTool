@@ -148,15 +148,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1533cd327d9771244ab89686d9127645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawMode: 1
   mapWidth: 100
   mapHeight: 100
-  noiseScale: 13.5
-  octaves: 10
-  persistence: 0.54
-  lacunarity: 2.09
+  noiseScale: 17.91
+  octaves: 4
+  persistence: 0.1
+  lacunarity: 2.92
   seed: 0
-  offset: {x: -0.38, y: -8.11}
+  offset: {x: 0.16, y: -8.9}
   autoUpdate: 1
+  regions:
+  - name: Deep Water
+    height: 0.1
+    color: {r: 0, g: 0.26293093, b: 0.44852942, a: 0}
+  - name: Water
+    height: 0.2
+    color: {r: 0.01838237, g: 0.42418882, b: 0.625, a: 0}
+  - name: Sand
+    height: 0.3
+    color: {r: 0.76020765, g: 0.7647059, b: 0.43858132, a: 0}
+  - name: Grass
+    height: 0.4
+    color: {r: 0.46240005, g: 0.75735295, b: 0.22275086, a: 0}
+  - name: Lush Grass
+    height: 0.5
+    color: {r: 0.2077206, g: 0.8308824, b: 0.23780432, a: 0}
+  - name: Lusher Grass
+    height: 0.6
+    color: {r: 0.01838237, g: 0.625, b: 0.04766741, a: 0}
+  - name: Rock
+    height: 0.7
+    color: {r: 0.46323532, g: 0.39840114, b: 0.2588668, a: 0}
+  - name: Rock 2
+    height: 0.85
+    color: {r: 0.30147058, g: 0.28398162, b: 0.1862024, a: 0}
+  - name: Snow
+    height: 0.95
+    color: {r: 1, g: 1, b: 1, a: 0}
+  - name: Rock 3
+    height: 1
+    color: {r: 0.5661765, g: 0.5320107, b: 0.42046928, a: 0}
 --- !u!4 &512229426
 Transform:
   m_ObjectHideFlags: 0
