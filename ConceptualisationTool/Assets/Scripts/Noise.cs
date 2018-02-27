@@ -18,7 +18,8 @@ public static class Noise{
 
         if (scale <= 0)
             scale = 0.0001f;
-
+        
+        //min and max noise height will allow us to confine the range into a 0-1 decimal range with InverseLerp
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
 
