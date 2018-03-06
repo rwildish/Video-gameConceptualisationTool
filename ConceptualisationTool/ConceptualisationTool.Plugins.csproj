@@ -87,6 +87,7 @@
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\ScreenSpaceAmbientOcclusion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Models\Not my Assets\Grass And Flowers Pack 1\Example Scene\Skyboxes\_skybox info.txt" />
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
@@ -128,6 +129,10 @@
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Resources\Shaders\Uber.shader" />
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
     <None Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
+    <None Include="Assets\Models\Not my Assets\Lowpoly_Holiday_House\Readme.txt" />
+    <None Include="Assets\Models\Not my Assets\Stykized Vegetation Pack Free\Readme.txt" />
+    <None Include="Assets\Models\Not my Assets\Stylized Nature Environment\ReadMe.txt" />
+    <None Include="Assets\Models\Not my Assets\Workplace Tools\README.txt" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ChromaticAberrationShader.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ConvertDepth.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\CreaseApply.shader" />

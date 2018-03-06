@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConceptualisationTool", "ConceptualisationTool.csproj", "{CBF07B72-8E65-F0F3-B884-B93D1B409992}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConceptualisationTool.Plugins", "ConceptualisationTool.Plugins.csproj", "{1BAF9563-5C1A-844B-C488-BC42234EAC67}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConceptualisationTool.Editor", "ConceptualisationTool.Editor.csproj", "{0A71C3C0-2871-8EFE-F94F-1C76E7397712}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConceptualisationTool.Plugins", "ConceptualisationTool.Plugins.csproj", "{1BAF9563-5C1A-844B-C488-BC42234EAC67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,14 @@ Global
 		{CBF07B72-8E65-F0F3-B884-B93D1B409992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF07B72-8E65-F0F3-B884-B93D1B409992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF07B72-8E65-F0F3-B884-B93D1B409992}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A71C3C0-2871-8EFE-F94F-1C76E7397712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A71C3C0-2871-8EFE-F94F-1C76E7397712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A71C3C0-2871-8EFE-F94F-1C76E7397712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A71C3C0-2871-8EFE-F94F-1C76E7397712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BAF9563-5C1A-844B-C488-BC42234EAC67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
