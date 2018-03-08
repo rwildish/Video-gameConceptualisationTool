@@ -38,6 +38,8 @@ public class UserOptions : MonoBehaviour {
     {
         mapGen = GameObject.Find("MapGenerator");
         MapGenerator mapGenerator = mapGen.GetComponent<MapGenerator>();
+        GameObject userAO = GameObject.Find("Options");
+        UserAdvancedOptions userAdvancedOptions = userAO.GetComponent<UserAdvancedOptions>();
 
         if (terrainType == TerrainType.Mountainous)
         {
@@ -50,7 +52,9 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 20.0f;
             mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
+            userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
+            
         }
         else if (terrainType == TerrainType.Flat)
         {
@@ -63,6 +67,7 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 20.0f;
             mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(mapGenerator.regions[1].height, 0.0f), new Keyframe(1f, 0.1f));
+            userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
         }
         else if (terrainType == TerrainType.Hilly)
@@ -76,6 +81,7 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 10.0f;
             mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
+            userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
         }
         

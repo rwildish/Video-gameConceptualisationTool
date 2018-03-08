@@ -148,6 +148,19 @@ public class MapGenerator : MonoBehaviour {
             drawMode = DrawMode.HeightMap;
         else if (userAdvancedOptions.dMode == "Mesh")
             drawMode = DrawMode.Mesh;
+
+        mapWidth = userAdvancedOptions.mapWidth;
+        mapHeight = userAdvancedOptions.mapHeight;
+        noiseScale = userAdvancedOptions.noiseScale;
+        octaves = userAdvancedOptions.octaves;
+        persistence = userAdvancedOptions.persistence;
+        lacunarity = userAdvancedOptions.lacunarity;
+        seed = userAdvancedOptions.seed;
+        offset.x = userAdvancedOptions.offset.x;
+        offset.y = userAdvancedOptions.offset.y;
+        meshHeightMultiplier = userAdvancedOptions.meshHeightMultiplier;
+        meshHeightCurve = userAdvancedOptions.meshHeightCurve;
+        autoUpdate = userAdvancedOptions.autoUpdate;
     }
 
     public void SetDrawMode()
