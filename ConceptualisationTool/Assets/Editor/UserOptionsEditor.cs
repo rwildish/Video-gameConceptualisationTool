@@ -9,6 +9,7 @@ public class UserOptionsEditor : Editor {
     {
         UserOptions userOption = (UserOptions)target;
 
+
         if (DrawDefaultInspector())
         {
             if (userOption.autoUpdate)
@@ -23,3 +24,5 @@ public class UserOptionsEditor : Editor {
         }
     }
 }
+
+

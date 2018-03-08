@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\MapEditor.cs" />
+    <Compile Include="Assets\Editor\UserAdvancedOptionsEditor.cs" />
     <Compile Include="Assets\Editor\UserOptionsEditor.cs" />
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Editor\Models\AmbientOcclusionModelEditor.cs" />

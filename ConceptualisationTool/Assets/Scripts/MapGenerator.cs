@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour {
 
+    public GameObject plane;
+    public GameObject mesh;
+
     public enum DrawMode {HeightMap, ColorMap, Mesh};
     public DrawMode drawMode;
 
@@ -25,6 +28,8 @@ public class MapGenerator : MonoBehaviour {
     public bool autoUpdate;
 
     public TerrainType[] regions;
+    [HideInInspector]
+    public string dMode;
 
     TerrainType deepWater;
     TerrainType water;
@@ -113,6 +118,7 @@ public class MapGenerator : MonoBehaviour {
             display.DrawTexture(TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
         else if (drawMode == DrawMode.Mesh)
             display.DrawMesh(MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
+        UpdateDraw();
     }
     //OnValidate allows me to apply restrictions to variables that the users will change in the inspector of Unity
     //This is useful as users may not know why the Octaves cannot be negative, etc.
@@ -129,6 +135,43 @@ public class MapGenerator : MonoBehaviour {
 
         if (octaves < 0)
             octaves = 0;
+    }
+
+    public void UpdateVariables()
+    {
+        GameObject userAO = GameObject.Find("Options");
+        UserAdvancedOptions userAdvancedOptions = userAO.GetComponent<UserAdvancedOptions>();
+
+        if (userAdvancedOptions.dMode == "ColorMap")
+            drawMode = DrawMode.ColorMap;
+        else if (userAdvancedOptions.dMode == "HeightMap")
+            drawMode = DrawMode.HeightMap;
+        else if (userAdvancedOptions.dMode == "Mesh")
+            drawMode = DrawMode.Mesh;
+    }
+
+    public void SetDrawMode()
+    {
+        if (drawMode == DrawMode.ColorMap)
+            dMode = "ColorMap";
+        else if (drawMode == DrawMode.HeightMap)
+            dMode = "HeightMap";
+        else if (drawMode == DrawMode.Mesh)
+            dMode = "Mesh";
+    }
+
+    public void UpdateDraw()
+    {
+        if (drawMode == DrawMode.Mesh)
+        {
+            mesh.SetActive(true);
+            plane.SetActive(false);
+        }
+        else
+        {
+            mesh.SetActive(false);
+            plane.SetActive(true);
+        }
     }
 }
 //A struct to allow users to create their own terrain colours and essentially their design

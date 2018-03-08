@@ -15,15 +15,24 @@ public class UserOptions : MonoBehaviour {
     public TerrainGenerationType terrainGenerationType;
 
     public bool autoUpdate;
+    [HideInInspector]
+    public string tType;
+    [HideInInspector]
+    public string eType;
+    [HideInInspector]
+    public string tGType;
 
-    public AdvancedOptions[] advancedOptions;
+
 
     GameObject mapGen;
 
     void Start()
     {
         
+        
     }
+
+    
 
     public void UpdateOptions()
     {
@@ -32,10 +41,6 @@ public class UserOptions : MonoBehaviour {
 
         if (terrainType == TerrainType.Mountainous)
         {
-            //Keyframe[] ks;
-            //ks = new Keyframe[2];
-            //ks[0] = new Keyframe(0, 0.3f);
-            //ks[1] = new Keyframe(1, 1f);
             mapGenerator.noiseScale = 48;
             mapGenerator.octaves = 5;
             mapGenerator.persistence = 0.384f;
@@ -97,9 +102,14 @@ public class UserOptions : MonoBehaviour {
 
     }
 
+    public void UpdateVariables()
+    {
+        //GameObject mapGen = GameObject.Find("MapGenerator");
+        //MapGenerator mapGenerator = mapGen.GetComponent<MapGenerator>();
+
+        terrainType = TerrainType.Custom;
+
+    }
+
 }
-[System.Serializable]
-public struct AdvancedOptions
-{
-    public string name;
-}
+
