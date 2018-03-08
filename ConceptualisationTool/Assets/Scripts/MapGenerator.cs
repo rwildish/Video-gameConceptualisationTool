@@ -26,6 +26,65 @@ public class MapGenerator : MonoBehaviour {
 
     public TerrainType[] regions;
 
+    TerrainType deepWater;
+    TerrainType water;
+    TerrainType sand;
+    TerrainType grass;
+    TerrainType grass2;
+    TerrainType grass3;
+    TerrainType rock;
+    TerrainType rock2;
+    TerrainType rock3;
+    TerrainType snow;
+    TerrainType none;
+
+    void Start()
+    {
+        deepWater.name = "Deep Water";
+        deepWater.height = 0.22f;
+        deepWater.color = new Color (8, 89, 129, 0);
+
+        water.name = "Water";
+        water.height = 0.32f;
+        water.color = new Color(5, 108, 159, 0);
+
+        sand.name = "Sand";
+        sand.height = 0.35f;
+        sand.color = new Color(214, 216, 127, 0);
+
+        grass.name = "Grass";
+        grass.height = 0.5f;
+        grass.color = new Color(61, 229, 69, 0);
+
+        grass2.name = "Grass 2";
+        grass2.height = 0.65f;
+        grass2.color = new Color(46, 203, 54, 0);
+
+        grass3.name = "Grass 3";
+        grass3.height = 0.75f;
+        grass3.color = new Color(0, 191, 10, 0);
+
+        rock.name = "Rock";
+        rock.height = 0.85f;
+        rock.color = new Color(118, 102, 66, 0);
+
+        rock2.name = "Rock 2";
+        rock2.height = 0.9f;
+        rock2.color = new Color(77, 72, 47, 0);
+
+        rock3.name = "Rock 3";
+        rock3.height = 1f;
+        rock3.color = new Color(144, 136, 107, 0);
+
+        snow.name = "Snow";
+        snow.height = 0.97f;
+        snow.color = new Color(255, 255, 255, 0);
+
+        none.name = "none";
+        none.height = 0;
+        none.color = new Color (255,255,255,255);
+    }
+
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);

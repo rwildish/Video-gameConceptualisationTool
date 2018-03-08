@@ -141,6 +141,7 @@
     <Compile Include="Assets\Scripts\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Noise.cs" />
     <Compile Include="Assets\Scripts\TextureGenerator.cs" />
+    <Compile Include="Assets\Scripts\UserOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Models\Not my Assets\Grass And Flowers Pack 1\Example Scene\Skyboxes\_skybox info.txt" />
