@@ -31,6 +31,12 @@ public class MapGenerator : MonoBehaviour {
     [HideInInspector]
     public string dMode;
 
+    public int housingWidth;
+    public int housingHeight;
+    public int housingWidthStart;
+    public int housingHeightStart;
+    float[,] housingMap;
+
     TerrainType deepWater;
     TerrainType water;
     TerrainType sand;
@@ -93,6 +99,47 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
+       
+        System.Random rng = new System.Random();
+        housingWidthStart = rng.Next(0, mapWidth - housingWidth);
+        housingHeightStart = rng.Next(0, mapHeight - housingHeight);
+        bool canExit = false;
+
+        for (int x = 0; x < 1000; x++)
+        {
+            if(canExit == true)
+            {
+                break;
+            }
+            for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
+            {
+                for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
+                {
+                    if (noiseMap[i, j] <= 0.32f || noiseMap[i,j] >= 0.65f)
+                    {
+                        housingWidthStart = rng.Next(0, mapWidth - housingWidth);
+                        housingHeightStart = rng.Next(0, mapHeight - housingHeight);
+                        
+                        canExit = false;
+                    }
+                    else
+                    {
+                        canExit = true;
+                    }
+                }
+            }
+            
+            
+        }
+
+        for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
+        {
+            for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
+            {
+                noiseMap[i, j] = 0.5f;
+            }
+        }
+
         //make an array with a size of the height of the map times the width of the map so each element in the array represents a pixel
         Color[] colorMap = new Color[mapWidth * mapHeight];
         for (int y = 0; y < mapHeight; y++)
@@ -110,6 +157,8 @@ public class MapGenerator : MonoBehaviour {
                 }
             }
         }
+
+        
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawMode == DrawMode.HeightMap)
