@@ -35,7 +35,7 @@ public class MapGenerator : MonoBehaviour {
     public int housingHeight;
     public int housingWidthStart;
     public int housingHeightStart;
-    float[,] housingMap;
+    float[,] noiseMapCopy;
 
     TerrainType deepWater;
     TerrainType water;
@@ -99,32 +99,112 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
-       
-        System.Random rng = new System.Random();
-        housingWidthStart = rng.Next(0, mapWidth - housingWidth);
-        housingHeightStart = rng.Next(0, mapHeight - housingHeight);
-        bool canExit = false;
 
-        for (int x = 0; x < 1000; x++)
+
+        //deepWater
+        for (int i = 1; i < mapWidth - 1; i++)
         {
-            if(canExit == true)
+            for (int j = 1; j < mapHeight - 1; j++)
+            {
+                if (noiseMap[i, j] < 0.19f)
+                {
+                    int connectedHeight = 0;
+                    for (int a = i - 1; a <= i + 1; a++)
+                    {
+                        for (int b = j - 1; b <= j + 1; b++)
+                        {
+                            if (noiseMap[a, b] < 0.19f)
+                            {
+                                connectedHeight++;
+                            }
+                        }
+                    }
+                    if (connectedHeight < 6)
+                        noiseMap[i, j] = Random.Range(0.19f, 0.28f);
+                }
+            }
+        }
+
+        //water
+        for (int i = 1; i < mapWidth - 1; i++)
+        {
+            for (int j = 1; j < mapHeight - 1; j++)
+            {
+                if (noiseMap[i, j] < 0.29f && noiseMap[i, j] > 0.18f)
+                {
+                    int connectedHeight = 0;
+                    for (int a = i - 1; a <= i + 1; a++)
+                    {
+                        for (int b = j - 1; b <= j + 1; b++)
+                        {
+                            if (noiseMap[a, b] < 0.29f)
+                            {
+                                connectedHeight++;
+                            }
+                        }
+                    }
+                    if (connectedHeight < 6)
+                        noiseMap[i, j] = Random.Range(0.29f, 0.31f);
+                }
+            }
+        }
+
+        //sand
+        for (int i = 1; i < mapWidth-1; i++)
+        {
+            for (int j = 1; j < mapHeight-1; j++)
+            {
+                if(noiseMap[i,j] < 0.32f && noiseMap[i,j] > 0.28f)
+                {
+                    int connectedHeight = 0;
+                    for (int a = i -1; a <= i +1; a++)
+                    {
+                        for (int b = j-1; b <= j+1; b++)
+                        {
+                            if (noiseMap[a,b] < 0.32f)
+                            {
+                                connectedHeight++;
+                            }
+                        }
+                    }
+                    if (connectedHeight < 6)
+                        noiseMap[i, j] = Random.Range(0.32f,0.35f);
+                }
+            }
+        }
+
+        System.Random rng = new System.Random();
+        housingWidthStart = rng.Next(1, mapWidth - housingWidth);
+        housingHeightStart = rng.Next(1, mapHeight - housingHeight);
+        bool canExit = false;
+        float avgHeight = 0;
+
+        for (int z = 0; z < 10000; z++)
+        {
+            
+            if (canExit == true)
             {
                 break;
             }
+
+            canExit = true;
+            avgHeight = 0;
+
             for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
             {
                 for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
                 {
-                    if (noiseMap[i, j] <= 0.32f || noiseMap[i,j] >= 0.65f)
+                    if (noiseMap[i, j] < 0.32f || noiseMap[i,j] > 0.5f)
                     {
-                        housingWidthStart = rng.Next(0, mapWidth - housingWidth);
-                        housingHeightStart = rng.Next(0, mapHeight - housingHeight);
-                        
                         canExit = false;
+                        avgHeight = 0;
+                        housingWidthStart = rng.Next(1, mapWidth - housingWidth);
+                        housingHeightStart = rng.Next(1, mapHeight - housingHeight);
                     }
                     else
                     {
-                        canExit = true;
+                        avgHeight += noiseMap[i, j];
+                        
                     }
                 }
             }
@@ -132,11 +212,19 @@ public class MapGenerator : MonoBehaviour {
             
         }
 
+        avgHeight = avgHeight / ((housingWidth) * (housingHeight));
+
+
+        //if (avgHeight > 0.49f)
+          //  avgHeight = 0.49f;
+        //else if (avgHeight < 0.33f)
+          //  avgHeight = 0.33f;
+
         for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
         {
             for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
             {
-                noiseMap[i, j] = 0.5f;
+                noiseMap[i, j] = Random.Range(avgHeight - 0.002f, avgHeight + 0.002f);
             }
         }
 
@@ -158,6 +246,15 @@ public class MapGenerator : MonoBehaviour {
             }
         }
 
+        noiseMapCopy = new float[mapWidth, mapHeight];
+
+        for (int i = 0; i < mapWidth; i++)
+        {
+            for (int j = 0; j < mapHeight; j++)
+            {
+                noiseMapCopy[i, j] = noiseMap[i, j];
+            }
+        }
         
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
@@ -184,6 +281,22 @@ public class MapGenerator : MonoBehaviour {
 
         if (octaves < 0)
             octaves = 0;
+
+        if (housingWidthStart < 0)
+            housingWidthStart = 0;
+
+        if (housingHeightStart < 0)
+            housingHeightStart = 0;
+
+        if (housingHeight < 0)
+            housingHeight = 0;
+
+        if (housingWidth < 0)
+            housingWidth = 0;
+
+        if (octaves > 20)
+            octaves = 20;
+
     }
 
     public void UpdateVariables()
@@ -234,6 +347,15 @@ public class MapGenerator : MonoBehaviour {
             mesh.SetActive(false);
             plane.SetActive(true);
         }
+        GameObject aVG = GameObject.Find("MapGenerator");
+        ArchitectureVegetationGenerator aVGenerator = aVG.GetComponent<ArchitectureVegetationGenerator>();
+
+        aVGenerator.GenerateArchitecture();
+    }
+
+    public float[,] GetNoiseMap()
+    {
+        return noiseMapCopy;
     }
 }
 //A struct to allow users to create their own terrain colours and essentially their design

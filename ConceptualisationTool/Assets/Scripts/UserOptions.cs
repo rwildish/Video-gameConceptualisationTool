@@ -43,6 +43,7 @@ public class UserOptions : MonoBehaviour {
 
         if (terrainType == TerrainType.Mountainous)
         {
+            tType = "Mountainous";
             mapGenerator.noiseScale = 48;
             mapGenerator.octaves = 5;
             mapGenerator.persistence = 0.384f;
@@ -58,6 +59,7 @@ public class UserOptions : MonoBehaviour {
         }
         else if (terrainType == TerrainType.Flat)
         {
+            tType = "Flat";
             mapGenerator.noiseScale = 48;
             mapGenerator.octaves = 5;
             mapGenerator.persistence = 0.384f;
@@ -72,6 +74,7 @@ public class UserOptions : MonoBehaviour {
         }
         else if (terrainType == TerrainType.Hilly)
         {
+            tType = "Hilly";
             mapGenerator.noiseScale = 48;
             mapGenerator.octaves = 5;
             mapGenerator.persistence = 0.384f;
