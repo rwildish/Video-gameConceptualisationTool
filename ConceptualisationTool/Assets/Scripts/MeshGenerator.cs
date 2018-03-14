@@ -11,7 +11,11 @@ public static class MeshGenerator {
         float topLeftX = (width - 1) / -2f;
         float topLeftZ = (height - 1) / 2f;
 
-        MeshData meshData = new MeshData(width, height);
+        GameObject mapGen = GameObject.Find("MapGenerator");
+        MapGenerator mapGenerator = mapGen.GetComponent<MapGenerator>();
+        bool useFlatShading = mapGenerator.useFlatShading;
+
+        MeshData meshData = new MeshData(width, height, useFlatShading);
         int vertexIndex = 0;
 
         for (int y = 0; y < height; y++)
@@ -33,7 +37,12 @@ public static class MeshGenerator {
 
                 vertexIndex++;
             }
-        } return meshData;
+            
+
+        }
+        if (useFlatShading)
+            meshData.FlatShading();
+        return meshData;
     }
 }
 
@@ -45,8 +54,11 @@ public class MeshData
 
     int triangleIndex;
 
-    public MeshData(int meshWidth, int meshHeight)
+    
+
+    public MeshData(int meshWidth, int meshHeight, bool useFlatShading)
     {
+
         vertices = new Vector3[meshWidth * meshHeight];
         uvs = new Vector2[meshWidth * meshHeight];
         triangles = new int[(meshWidth - 1) * (meshHeight - 1) * 6];
@@ -58,6 +70,22 @@ public class MeshData
         triangles[triangleIndex + 1] = b;
         triangles[triangleIndex + 2] = c;
         triangleIndex += 3;
+    }
+
+    public void FlatShading()
+    {
+        Vector3[] flatShadedVertices = new Vector3[triangles.Length];
+        Vector2[] flatShadedUvs = new Vector2[triangles.Length];
+
+        for(int i = 0; i < triangles.Length; i++)
+        {
+            flatShadedVertices[i] = vertices[triangles[i]];
+            flatShadedUvs[i] = uvs[triangles[i]];
+            triangles[i] = i;
+        }
+
+        vertices = flatShadedVertices;
+        uvs = flatShadedUvs;
     }
 
     public Mesh CreateMesh()

@@ -7,7 +7,7 @@ public class MapGenerator : MonoBehaviour {
     public GameObject plane;
     public GameObject mesh;
 
-    public enum DrawMode {HeightMap, ColorMap, Mesh};
+    public enum DrawMode {HeightMap, ColorMap, Mesh, FalloffMap};
     public DrawMode drawMode;
 
     public int mapWidth;
@@ -21,13 +21,15 @@ public class MapGenerator : MonoBehaviour {
 
     public int seed;
     public Vector2 offset;
-
+    public bool useFalloffMap;
+    public bool useFlatShading;
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
 
     public bool autoUpdate;
 
     public TerrainType[] regions;
+    float[,] falloffMap;
     [HideInInspector]
     public string dMode;
 
@@ -50,8 +52,10 @@ public class MapGenerator : MonoBehaviour {
     TerrainType snow;
     TerrainType none;
 
-    void Start()
+    void Awake()
     {
+        
+
         deepWater.name = "Deep Water";
         deepWater.height = 0.22f;
         deepWater.color = new Color (8, 89, 129, 0);
@@ -101,9 +105,22 @@ public class MapGenerator : MonoBehaviour {
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
 
+        if(useFalloffMap)
+        {
+            falloffMap = FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight);
+            for (int i = 0; i < mapWidth; i++)
+            {
+                for (int j = 0; j < mapHeight; j++)
+                {
+                    noiseMap[i, j] = Mathf.Clamp01(noiseMap[i, j] - falloffMap[i, j]);
+                }
+            }
+        }
+
 
         //deepWater
-        for (int i = 1; i < mapWidth - 1; i++)
+        if (useFalloffMap == false)
+            for (int i = 1; i < mapWidth - 1; i++)
         {
             for (int j = 1; j < mapHeight - 1; j++)
             {
@@ -127,7 +144,8 @@ public class MapGenerator : MonoBehaviour {
         }
 
         //water
-        for (int i = 1; i < mapWidth - 1; i++)
+        if (useFalloffMap == false)
+            for (int i = 1; i < mapWidth - 1; i++)
         {
             for (int j = 1; j < mapHeight - 1; j++)
             {
@@ -145,31 +163,32 @@ public class MapGenerator : MonoBehaviour {
                         }
                     }
                     if (connectedHeight < 6)
-                        noiseMap[i, j] = Random.Range(0.29f, 0.31f);
+                        noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                 }
             }
         }
 
         //sand
-        for (int i = 1; i < mapWidth-1; i++)
+        if (useFalloffMap == false)
+            for (int i = 1; i < mapWidth - 1; i++)
         {
-            for (int j = 1; j < mapHeight-1; j++)
+            for (int j = 1; j < mapHeight - 1; j++)
             {
-                if(noiseMap[i,j] < 0.32f && noiseMap[i,j] > 0.28f)
+                if (noiseMap[i, j] < 0.32f && noiseMap[i, j] > 0.28f)
                 {
                     int connectedHeight = 0;
-                    for (int a = i -1; a <= i +1; a++)
+                    for (int a = i - 1; a <= i + 1; a++)
                     {
-                        for (int b = j-1; b <= j+1; b++)
+                        for (int b = j - 1; b <= j + 1; b++)
                         {
-                            if (noiseMap[a,b] < 0.32f)
+                            if (noiseMap[a, b] < 0.32f)
                             {
                                 connectedHeight++;
                             }
                         }
                     }
                     if (connectedHeight < 6)
-                        noiseMap[i, j] = Random.Range(0.32f,0.35f);
+                        noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                 }
             }
         }
@@ -265,6 +284,8 @@ public class MapGenerator : MonoBehaviour {
             display.DrawTexture(TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
         else if (drawMode == DrawMode.Mesh)
             display.DrawMesh(MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
+        else if (drawMode == DrawMode.FalloffMap)
+            display.DrawTexture(TextureGenerator.TextureHeightMap(FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight)));
         UpdateDraw();
     }
     //OnValidate allows me to apply restrictions to variables that the users will change in the inspector of Unity
@@ -276,6 +297,12 @@ public class MapGenerator : MonoBehaviour {
 
         if (mapHeight < 1)
             mapHeight = 1;
+
+        if (mapHeight * mapWidth > 255 * 255)
+        {
+            mapHeight = 255;
+            mapWidth = 255;
+        }
 
         if (lacunarity < 1)
             lacunarity = 1;
@@ -298,6 +325,15 @@ public class MapGenerator : MonoBehaviour {
         if (octaves > 20)
             octaves = 20;
 
+        if (useFlatShading)
+        {
+            if(mapWidth * mapHeight > 96 * 96)
+            {
+                mapWidth = 96;
+                mapHeight = 96;
+            }
+            
+        }
     }
 
     public void UpdateVariables()
@@ -311,6 +347,8 @@ public class MapGenerator : MonoBehaviour {
             drawMode = DrawMode.HeightMap;
         else if (userAdvancedOptions.dMode == "Mesh")
             drawMode = DrawMode.Mesh;
+        else if (userAdvancedOptions.dMode == "FalloffMap")
+            drawMode = DrawMode.FalloffMap;
 
         mapWidth = userAdvancedOptions.mapWidth;
         mapHeight = userAdvancedOptions.mapHeight;
@@ -334,6 +372,8 @@ public class MapGenerator : MonoBehaviour {
             dMode = "HeightMap";
         else if (drawMode == DrawMode.Mesh)
             dMode = "Mesh";
+        else if (drawMode == DrawMode.FalloffMap)
+            dMode = "FalloffMap";
     }
 
     public void UpdateDraw()
