@@ -36,6 +36,7 @@ public class MapGenerator : MonoBehaviour {
     public int housingWidthStart;
     public int housingHeightStart;
     float[,] noiseMapCopy;
+    float avgHeight;
 
     TerrainType deepWater;
     TerrainType water;
@@ -177,7 +178,7 @@ public class MapGenerator : MonoBehaviour {
         housingWidthStart = rng.Next(1, mapWidth - housingWidth);
         housingHeightStart = rng.Next(1, mapHeight - housingHeight);
         bool canExit = false;
-        float avgHeight = 0;
+        avgHeight = 0;
 
         for (int z = 0; z < 10000; z++)
         {
@@ -224,7 +225,7 @@ public class MapGenerator : MonoBehaviour {
         {
             for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
             {
-                noiseMap[i, j] = Random.Range(avgHeight - 0.002f, avgHeight + 0.002f);
+                noiseMap[i, j] = avgHeight;
             }
         }
 
@@ -356,6 +357,11 @@ public class MapGenerator : MonoBehaviour {
     public float[,] GetNoiseMap()
     {
         return noiseMapCopy;
+    }
+
+    public float GetAvgHeight()
+    {
+        return avgHeight;
     }
 }
 //A struct to allow users to create their own terrain colours and essentially their design
