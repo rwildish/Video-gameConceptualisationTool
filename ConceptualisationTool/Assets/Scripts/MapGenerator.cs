@@ -1,47 +1,72 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MapGenerator : MonoBehaviour {
+
+    const int textureSize = 512;
+    const TextureFormat textureFormat = TextureFormat.RGB565;
 
     public GameObject plane;
     public GameObject mesh;
 
     public enum DrawMode {HeightMap, ColorMap, Mesh, FalloffMap};
+    [Tooltip("Determines the Draw Mode")]
     public DrawMode drawMode;
-
+    [Tooltip("Determines the maps width, in whichever Draw Mode")]
     public int mapWidth;
+    [Tooltip("Determines the maps height, in whichever Draw Mode")]
     public int mapHeight;
+    [Tooltip("Determines the scale of the noise map in comparison to the map size")]
     public float noiseScale;
-
+    [Tooltip("Determines the amount of overlapping noise maps to give a higher detail noisemap (Hint: keep around 5)")]
     public int octaves;
+    [Tooltip("Determines the control of decrease in amplitude within each octave")]
     [Range(0,1)]
     public float persistence;
+    [Tooltip("Determines the increase in frequency within each octave")]
     public float lacunarity;
-
+    [Tooltip("Determines the starting point of the noisemap")]
     public int seed;
+    [Tooltip("Allows for an increase or decrease of the starting point of the noisemap (on x and y axis")]
     public Vector2 offset;
+    [Tooltip("Determines whether or not to use a falloff map")]
     public bool useFalloffMap;
+    [Tooltip("Determines whether or not to use flatshading")]
     public bool useFlatShading;
+    [Tooltip("Determines whether or not to use the colour shader")]
     public bool useColourShader;
+    [Tooltip("Determines whether or not to use the texture shader")]
+    public bool useTextureShader;
+    [Tooltip("Determines the multiplied height of the mesh")]
     public float meshHeightMultiplier;
+    [Tooltip("Allows for the flatness of water, whilst allowing other areas to gain height (Mesh only)")]
     public AnimationCurve meshHeightCurve;
-
+    [Tooltip("Determines whether to auto update or not")]
     public bool autoUpdate;
-
+    [Tooltip("Region colours for standard shader")]
     public TerrainType[] regions;
+    [Tooltip("Determines the base colours for the colour shader")]
     public Color[] baseColours;
+    [Tooltip("Determines the start heights for each colour in the base colours")]
     [Range(0,1)]
     public float[] baseStartHeights;
+    [Tooltip("Determines the blend between colours in the base colours")]
     [Range(0,1)]
     public float[] baseBlends;
+    [Tooltip("Determines the blend between colours and textures as well as the height in the Texture Shader")]
+    public Layer[] layers;
     float[,] falloffMap;
     [HideInInspector]
     public string dMode;
-
+    [Tooltip("Determines the housing area width")]
     public int housingWidth;
+    [Tooltip("Determines the housing area height")]
     public int housingHeight;
+    [Tooltip("Determines the housing area start (x axis)")]
     public int housingWidthStart;
+    [Tooltip("Determines the housing area start (y axis)")]
     public int housingHeightStart;
     float[,] noiseMapCopy;
     float avgHeight;
@@ -299,7 +324,7 @@ public class MapGenerator : MonoBehaviour {
                 noiseMapCopy[i, j] = noiseMap[i, j];
             }
         }
-        if (useColourShader)
+        if (useColourShader || useTextureShader)
         {
             shader = Shader.Find("Custom/Terrain");
             terrainMaterial.shader = shader;
@@ -368,6 +393,18 @@ public class MapGenerator : MonoBehaviour {
             }
             
         }
+
+        if(useColourShader)
+        {
+            useColourShader = true;
+            useTextureShader = false;
+        }
+
+        if (useTextureShader)
+        {
+            useTextureShader = true;
+            useColourShader = false;
+        }
     }
 
     public void UpdateVariables()
@@ -412,7 +449,7 @@ public class MapGenerator : MonoBehaviour {
 
     public void UpdateDraw()
     {
-        if (drawMode == DrawMode.Mesh)
+        if (drawMode == DrawMode.Mesh || drawMode == DrawMode.FalloffMap)
         {
             mesh.SetActive(true);
             plane.SetActive(false);
@@ -432,10 +469,38 @@ public class MapGenerator : MonoBehaviour {
     {
         material.SetFloat("minHeight", minHeight);
         material.SetFloat("maxHeight", maxHeight);
-        material.SetInt("baseColourCount", baseColours.Length);
-        material.SetColorArray("baseColours", baseColours);
-        material.SetFloatArray("baseStartHeights", baseStartHeights);
-        material.SetFloatArray("baseBlends", baseBlends);
+
+        if (useColourShader)
+        {
+            material.SetInt("baseColourCount", baseColours.Length);
+            material.SetColorArray("baseColours", baseColours);
+            material.SetFloatArray("baseStartHeights", baseStartHeights);
+            material.SetFloatArray("baseBlends", baseBlends);
+        }
+        else if (useTextureShader)
+        {
+            material.SetInt("baseColourCount", layers.Length);
+            material.SetColorArray("baseColours", layers.Select(x => x.tint).ToArray());
+            material.SetFloatArray("baseStartHeights", layers.Select(x => x.startHeight).ToArray());
+            material.SetFloatArray("baseBlends", layers.Select(x => x.blendStrength).ToArray());
+            material.SetFloatArray("baseColourStrength", layers.Select(x => x.tintStrength).ToArray());
+            material.SetFloatArray("baseTextureScales", layers.Select(x => x.textureScale).ToArray());
+            Texture2DArray texturesArray = GenerateTextureArray(layers.Select(x => x.texture).ToArray());
+            material.SetTexture("baseTextures", texturesArray);
+
+        }
+    }
+
+    Texture2DArray GenerateTextureArray(Texture2D[] textures)
+    {
+        Texture2DArray textureArray = new Texture2DArray(textureSize, textureSize, textures.Length, textureFormat, true);
+
+        for(int i = 0; i< textures.Length; i++)
+        {
+            textureArray.SetPixels(textures[i].GetPixels(), i);
+        }
+        textureArray.Apply();
+        return textureArray;
     }
 
     public float[,] GetNoiseMap()
@@ -457,4 +522,18 @@ public struct TerrainType
     public string name;
     public float height;
     public Color color;
+}
+
+[System.Serializable]
+public class Layer
+{
+    public Texture2D texture;
+    public Color tint;
+    [Range(0,1)]
+    public float tintStrength;
+    [Range(0, 1)]
+    public float startHeight;
+    [Range(0, 1)]
+    public float blendStrength;
+    public float textureScale;
 }
