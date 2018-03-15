@@ -23,12 +23,18 @@ public class MapGenerator : MonoBehaviour {
     public Vector2 offset;
     public bool useFalloffMap;
     public bool useFlatShading;
+    public bool useColourShader;
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
 
     public bool autoUpdate;
 
     public TerrainType[] regions;
+    public Color[] baseColours;
+    [Range(0,1)]
+    public float[] baseStartHeights;
+    [Range(0,1)]
+    public float[] baseBlends;
     float[,] falloffMap;
     [HideInInspector]
     public string dMode;
@@ -39,6 +45,24 @@ public class MapGenerator : MonoBehaviour {
     public int housingHeightStart;
     float[,] noiseMapCopy;
     float avgHeight;
+    public Material terrainMaterial;
+    Shader shader;
+    [HideInInspector]
+    public float minHeight
+    {
+        get
+        {
+            return 10 * meshHeightMultiplier * meshHeightCurve.Evaluate(0);
+        }
+    }
+    [HideInInspector]
+    public float maxHeight
+    {
+        get
+        {
+            return 10 * meshHeightMultiplier * meshHeightCurve.Evaluate(1);
+        }
+    }
 
     TerrainType deepWater;
     TerrainType water;
@@ -275,7 +299,17 @@ public class MapGenerator : MonoBehaviour {
                 noiseMapCopy[i, j] = noiseMap[i, j];
             }
         }
-        
+        if (useColourShader)
+        {
+            shader = Shader.Find("Custom/Terrain");
+            terrainMaterial.shader = shader;
+            UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
+        }
+        else
+        {
+            shader = Shader.Find("Standard");
+            terrainMaterial.shader = shader;
+        }
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawMode == DrawMode.HeightMap)
@@ -392,6 +426,16 @@ public class MapGenerator : MonoBehaviour {
         ArchitectureVegetationGenerator aVGenerator = aVG.GetComponent<ArchitectureVegetationGenerator>();
 
         aVGenerator.GenerateArchitecture();
+    }
+
+    public void UpdateMeshHeights(Material material, float minHeight, float maxHeight)
+    {
+        material.SetFloat("minHeight", minHeight);
+        material.SetFloat("maxHeight", maxHeight);
+        material.SetInt("baseColourCount", baseColours.Length);
+        material.SetColorArray("baseColours", baseColours);
+        material.SetFloatArray("baseStartHeights", baseStartHeights);
+        material.SetFloatArray("baseBlends", baseBlends);
     }
 
     public float[,] GetNoiseMap()

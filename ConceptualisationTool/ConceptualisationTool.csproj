@@ -137,7 +137,6 @@
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
     <Compile Include="Assets\Scripts\ArchitectureVegetationGenerator.cs" />
-    <Compile Include="Assets\Scripts\Data\NoiseData.cs" />
     <Compile Include="Assets\Scripts\FalloffGenerator.cs" />
     <Compile Include="Assets\Scripts\MapDisplay.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
@@ -194,6 +193,7 @@
     <None Include="Assets\Models\Not my Assets\Stykized Vegetation Pack Free\Readme.txt" />
     <None Include="Assets\Models\Not my Assets\Stylized Nature Environment\ReadMe.txt" />
     <None Include="Assets\Models\Not my Assets\Workplace Tools\README.txt" />
+    <None Include="Assets\Scripts\Terrain.shader" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />

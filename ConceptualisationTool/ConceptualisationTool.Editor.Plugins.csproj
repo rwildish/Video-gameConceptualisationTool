@@ -188,6 +188,7 @@
     <None Include="Assets\Models\Not my Assets\Stykized Vegetation Pack Free\Readme.txt" />
     <None Include="Assets\Models\Not my Assets\Stylized Nature Environment\ReadMe.txt" />
     <None Include="Assets\Models\Not my Assets\Workplace Tools\README.txt" />
+    <None Include="Assets\Scripts\Terrain.shader" />
     <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
