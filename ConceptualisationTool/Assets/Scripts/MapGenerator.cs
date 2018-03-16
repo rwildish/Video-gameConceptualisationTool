@@ -14,6 +14,8 @@ public class MapGenerator : MonoBehaviour {
     public enum DrawMode {HeightMap, ColorMap, Mesh, FalloffMap};
     [Tooltip("Determines the Draw Mode")]
     public DrawMode drawMode;
+    public enum TerrainGenerationType {PerlinNoise, CellularAutomata};
+    public TerrainGenerationType terrainGT;
     [Tooltip("Determines the maps width, in whichever Draw Mode")]
     public int mapWidth;
     [Tooltip("Determines the maps height, in whichever Draw Mode")]
@@ -324,9 +326,15 @@ public class MapGenerator : MonoBehaviour {
                 noiseMapCopy[i, j] = noiseMap[i, j];
             }
         }
-        if (useColourShader || useTextureShader)
+        if (useTextureShader)
         {
             shader = Shader.Find("Custom/Terrain");
+            terrainMaterial.shader = shader;
+            UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
+        }
+        else if (useColourShader)
+        {
+            shader = Shader.Find("Custom/ColourShader");
             terrainMaterial.shader = shader;
             UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
         }
@@ -396,14 +404,14 @@ public class MapGenerator : MonoBehaviour {
 
         if(useColourShader)
         {
-            useColourShader = true;
             useTextureShader = false;
+            useColourShader = true;            
         }
 
         if (useTextureShader)
         {
-            useTextureShader = true;
             useColourShader = false;
+            useTextureShader = true;            
         }
     }
 
