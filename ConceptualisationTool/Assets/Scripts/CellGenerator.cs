@@ -90,7 +90,8 @@ public class CellGenerator : MonoBehaviour {
 
 
         GameObject wallColliders = GameObject.Find("Walls");
-        DestroyImmediate(wallColliders.GetComponent<MeshCollider>());
+        //if(wallColliders.GetComponent<MeshCollider>() != null)
+            DestroyImmediate(wallColliders.GetComponent<MeshCollider>());
 
         
 

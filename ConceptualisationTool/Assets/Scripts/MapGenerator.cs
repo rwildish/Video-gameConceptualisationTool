@@ -15,7 +15,7 @@ public class MapGenerator : MonoBehaviour {
     public enum DrawMode {HeightMap, ColorMap, Mesh, FalloffMap};
     [Tooltip("Determines the Draw Mode")]
     public DrawMode drawMode;
-    public enum TerrainGenerationType {PerlinNoise, CellularAutomata};
+    public enum TerrainGenerationType {PerlinNoise, CellularAutomata, ReverseCellularAutomata};
     [Tooltip("Determines which terrain generation type to use. Use PerlinNoise for a standard cuboid shaped terrain or CellullarAutomata for a more organicly shaped terrain")]
     public TerrainGenerationType terrainGenerationType;
     public enum ShaderMode {Standard, Colour, Texture};
@@ -97,7 +97,8 @@ public class MapGenerator : MonoBehaviour {
             return 10 * meshHeightMultiplier * meshHeightCurve.Evaluate(1);
         }
     }
-    int randomFillPercent;
+    [Range(0,100)]
+    public int randomFillPercent;
     int[,] map;
 
     public GameObject cellularAutomata;
@@ -381,7 +382,7 @@ public class MapGenerator : MonoBehaviour {
                 seed = UnityEngine.Random.Range(-9999, 9999);
             }
 
-            randomFillPercent = 53;
+            //randomFillPercent = 53;
 
             map = new int[mapWidth, mapHeight];
 
@@ -394,7 +395,14 @@ public class MapGenerator : MonoBehaviour {
                         map[i, j] = 1;
                     }
                     else {
-                        map[i, j] = (rng.Next(0, 100) < randomFillPercent) ? 1 : 0;
+                        if (terrainGenerationType == TerrainGenerationType.CellularAutomata)
+                        {
+                            map[i, j] = (rng.Next(0, 100) < randomFillPercent) ? 1 : 0;
+                        }
+                        else
+                        {
+                            map[i, j] = (rng.Next(0, 100) < randomFillPercent) ? 0 : 1;
+                        }
                     }
                 }
             }
@@ -433,9 +441,29 @@ public class MapGenerator : MonoBehaviour {
                     {
                         borderedMap[i, j] = map[i - borderSize, j - borderSize];
                     }
+                    
                     else
                     {
                         borderedMap[i, j] = 1;
+                    }
+                    
+                }
+            }
+
+            if (terrainGenerationType == TerrainGenerationType.ReverseCellularAutomata)
+            {
+                for (int i = 0; i < borderedMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < borderedMap.GetLength(1); j++)
+                    {
+                        if (borderedMap[i, j] == 1)
+                        {
+                            borderedMap[i, j] = 0;
+                        }
+                        else
+                        {
+                            borderedMap[i, j] = 1;
+                        }
                     }
                 }
             }
@@ -529,7 +557,7 @@ public class MapGenerator : MonoBehaviour {
             }
         }
 
-        if(terrainGenerationType == TerrainGenerationType.CellularAutomata)
+        if(terrainGenerationType == TerrainGenerationType.CellularAutomata || terrainGenerationType == TerrainGenerationType.ReverseCellularAutomata)
         {
             mesh.SetActive(false);
             //GameObject cellularAutomata = GameObject.Find("CellularAutomata");
@@ -676,10 +704,13 @@ public class MapGenerator : MonoBehaviour {
                 survivingRooms.Add(new Room(roomSection, map));
             }
         }
-        survivingRooms.Sort();
-        survivingRooms[0].isMainRoom = true;
-        survivingRooms[0].isAccessibleFromMainRoom = true;
-        ConnectClosestRooms(survivingRooms);
+        if (terrainGenerationType == TerrainGenerationType.CellularAutomata)
+        {
+            survivingRooms.Sort();
+            survivingRooms[0].isMainRoom = true;
+            survivingRooms[0].isAccessibleFromMainRoom = true;
+            ConnectClosestRooms(survivingRooms);
+        }
     }
 
     void ConnectClosestRooms(List<Room> allRooms, bool forceAccessibilityFromMainRoom = false)
