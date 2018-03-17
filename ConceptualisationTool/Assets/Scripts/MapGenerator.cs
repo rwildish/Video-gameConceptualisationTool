@@ -15,7 +15,11 @@ public class MapGenerator : MonoBehaviour {
     [Tooltip("Determines the Draw Mode")]
     public DrawMode drawMode;
     public enum TerrainGenerationType {PerlinNoise, CellularAutomata};
+    [Tooltip("Determines which terrain generation type to use. Use PerlinNoise for a standard cuboid shaped terrain or CellullarAutomata for a more organicly shaped terrain")]
     public TerrainGenerationType terrainGT;
+    public enum ShaderMode {Standard, Colour, Texture};
+    [Tooltip("Determines which shader to use on the terrain")]
+    public ShaderMode shaderMode;
     [Tooltip("Determines the maps width, in whichever Draw Mode")]
     public int mapWidth;
     [Tooltip("Determines the maps height, in whichever Draw Mode")]
@@ -37,10 +41,10 @@ public class MapGenerator : MonoBehaviour {
     public bool useFalloffMap;
     [Tooltip("Determines whether or not to use flatshading")]
     public bool useFlatShading;
-    [Tooltip("Determines whether or not to use the colour shader")]
-    public bool useColourShader;
-    [Tooltip("Determines whether or not to use the texture shader")]
-    public bool useTextureShader;
+    //[Tooltip("Determines whether or not to use the colour shader")]
+    //public bool useColourShader;
+    //[Tooltip("Determines whether or not to use the texture shader")]
+    //public bool useTextureShader;
     [Tooltip("Determines the multiplied height of the mesh")]
     public float meshHeightMultiplier;
     [Tooltip("Allows for the flatness of water, whilst allowing other areas to gain height (Mesh only)")]
@@ -90,6 +94,8 @@ public class MapGenerator : MonoBehaviour {
             return 10 * meshHeightMultiplier * meshHeightCurve.Evaluate(1);
         }
     }
+    int randomFillPercent;
+    int[,] map;
 
     TerrainType deepWater;
     TerrainType water;
@@ -103,258 +109,353 @@ public class MapGenerator : MonoBehaviour {
     TerrainType snow;
     TerrainType none;
 
-    void Awake()
-    {
+    //void Awake()
+    //{
         
 
-        deepWater.name = "Deep Water";
-        deepWater.height = 0.22f;
-        deepWater.color = new Color (8, 89, 129, 0);
+    //    deepWater.name = "Deep Water";
+    //    deepWater.height = 0.22f;
+    //    deepWater.color = new Color (8, 89, 129, 0);
 
-        water.name = "Water";
-        water.height = 0.32f;
-        water.color = new Color(5, 108, 159, 0);
+    //    water.name = "Water";
+    //    water.height = 0.32f;
+    //    water.color = new Color(5, 108, 159, 0);
 
-        sand.name = "Sand";
-        sand.height = 0.35f;
-        sand.color = new Color(214, 216, 127, 0);
+    //    sand.name = "Sand";
+    //    sand.height = 0.35f;
+    //    sand.color = new Color(214, 216, 127, 0);
 
-        grass.name = "Grass";
-        grass.height = 0.5f;
-        grass.color = new Color(61, 229, 69, 0);
+    //    grass.name = "Grass";
+    //    grass.height = 0.5f;
+    //    grass.color = new Color(61, 229, 69, 0);
 
-        grass2.name = "Grass 2";
-        grass2.height = 0.65f;
-        grass2.color = new Color(46, 203, 54, 0);
+    //    grass2.name = "Grass 2";
+    //    grass2.height = 0.65f;
+    //    grass2.color = new Color(46, 203, 54, 0);
 
-        grass3.name = "Grass 3";
-        grass3.height = 0.75f;
-        grass3.color = new Color(0, 191, 10, 0);
+    //    grass3.name = "Grass 3";
+    //    grass3.height = 0.75f;
+    //    grass3.color = new Color(0, 191, 10, 0);
 
-        rock.name = "Rock";
-        rock.height = 0.85f;
-        rock.color = new Color(118, 102, 66, 0);
+    //    rock.name = "Rock";
+    //    rock.height = 0.85f;
+    //    rock.color = new Color(118, 102, 66, 0);
 
-        rock2.name = "Rock 2";
-        rock2.height = 0.9f;
-        rock2.color = new Color(77, 72, 47, 0);
+    //    rock2.name = "Rock 2";
+    //    rock2.height = 0.9f;
+    //    rock2.color = new Color(77, 72, 47, 0);
 
-        rock3.name = "Rock 3";
-        rock3.height = 1f;
-        rock3.color = new Color(144, 136, 107, 0);
+    //    rock3.name = "Rock 3";
+    //    rock3.height = 1f;
+    //    rock3.color = new Color(144, 136, 107, 0);
 
-        snow.name = "Snow";
-        snow.height = 0.97f;
-        snow.color = new Color(255, 255, 255, 0);
+    //    snow.name = "Snow";
+    //    snow.height = 0.97f;
+    //    snow.color = new Color(255, 255, 255, 0);
 
-        none.name = "none";
-        none.height = 0;
-        none.color = new Color (255,255,255,255);
-    }
+    //    none.name = "none";
+    //    none.height = 0;
+    //    none.color = new Color (255,255,255,255);
+    //}
 
     public void GenerateMap()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
-
-        if(useFalloffMap)
+        if (terrainGT == TerrainGenerationType.PerlinNoise)
         {
-            falloffMap = FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight);
-            for (int i = 0; i < mapWidth; i++)
+
+            float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
+
+            if (useFalloffMap)
             {
-                for (int j = 0; j < mapHeight; j++)
+                falloffMap = FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight);
+                for (int i = 0; i < mapWidth; i++)
                 {
-                    noiseMap[i, j] = Mathf.Clamp01(noiseMap[i, j] - falloffMap[i, j]);
+                    for (int j = 0; j < mapHeight; j++)
+                    {
+                        noiseMap[i, j] = Mathf.Clamp01(noiseMap[i, j] - falloffMap[i, j]);
+                    }
                 }
             }
-        }
 
 
-        //deepWater
-        if (useFalloffMap == false)
-            for (int i = 1; i < mapWidth - 1; i++)
-        {
-            for (int j = 1; j < mapHeight - 1; j++)
-            {
-                if (noiseMap[i, j] < 0.19f)
+            //deepWater
+            if (useFalloffMap == false)
+                for (int i = 1; i < mapWidth - 1; i++)
                 {
-                    int connectedHeight = 0;
-                    for (int a = i - 1; a <= i + 1; a++)
+                    for (int j = 1; j < mapHeight - 1; j++)
                     {
-                        for (int b = j - 1; b <= j + 1; b++)
+                        if (noiseMap[i, j] < 0.19f)
                         {
-                            if (noiseMap[a, b] < 0.19f)
+                            int connectedHeight = 0;
+                            for (int a = i - 1; a <= i + 1; a++)
                             {
-                                connectedHeight++;
+                                for (int b = j - 1; b <= j + 1; b++)
+                                {
+                                    if (noiseMap[a, b] < 0.19f)
+                                    {
+                                        connectedHeight++;
+                                    }
+                                }
                             }
+                            if (connectedHeight < 6)
+                                noiseMap[i, j] = Random.Range(0.19f, 0.28f);
                         }
                     }
-                    if (connectedHeight < 6)
-                        noiseMap[i, j] = Random.Range(0.19f, 0.28f);
                 }
-            }
-        }
 
-        //water
-        if (useFalloffMap == false)
-            for (int i = 1; i < mapWidth - 1; i++)
-        {
-            for (int j = 1; j < mapHeight - 1; j++)
-            {
-                if (noiseMap[i, j] < 0.29f && noiseMap[i, j] > 0.18f)
+            //water
+            if (useFalloffMap == false)
+                for (int i = 1; i < mapWidth - 1; i++)
                 {
-                    int connectedHeight = 0;
-                    for (int a = i - 1; a <= i + 1; a++)
+                    for (int j = 1; j < mapHeight - 1; j++)
                     {
-                        for (int b = j - 1; b <= j + 1; b++)
+                        if (noiseMap[i, j] < 0.29f && noiseMap[i, j] > 0.18f)
                         {
-                            if (noiseMap[a, b] < 0.29f)
+                            int connectedHeight = 0;
+                            for (int a = i - 1; a <= i + 1; a++)
                             {
-                                connectedHeight++;
+                                for (int b = j - 1; b <= j + 1; b++)
+                                {
+                                    if (noiseMap[a, b] < 0.29f)
+                                    {
+                                        connectedHeight++;
+                                    }
+                                }
                             }
+                            if (connectedHeight < 6)
+                                noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                         }
                     }
-                    if (connectedHeight < 6)
-                        noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                 }
-            }
-        }
 
-        //sand
-        if (useFalloffMap == false)
-            for (int i = 1; i < mapWidth - 1; i++)
-        {
-            for (int j = 1; j < mapHeight - 1; j++)
-            {
-                if (noiseMap[i, j] < 0.32f && noiseMap[i, j] > 0.28f)
+            //sand
+            if (useFalloffMap == false)
+                for (int i = 1; i < mapWidth - 1; i++)
                 {
-                    int connectedHeight = 0;
-                    for (int a = i - 1; a <= i + 1; a++)
+                    for (int j = 1; j < mapHeight - 1; j++)
                     {
-                        for (int b = j - 1; b <= j + 1; b++)
+                        if (noiseMap[i, j] < 0.32f && noiseMap[i, j] > 0.28f)
                         {
-                            if (noiseMap[a, b] < 0.32f)
+                            int connectedHeight = 0;
+                            for (int a = i - 1; a <= i + 1; a++)
                             {
-                                connectedHeight++;
+                                for (int b = j - 1; b <= j + 1; b++)
+                                {
+                                    if (noiseMap[a, b] < 0.32f)
+                                    {
+                                        connectedHeight++;
+                                    }
+                                }
                             }
+                            if (connectedHeight < 6)
+                                noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                         }
                     }
-                    if (connectedHeight < 6)
-                        noiseMap[i, j] = Random.Range(0.32f, 0.35f);
                 }
-            }
-        }
 
-        System.Random rng = new System.Random();
-        housingWidthStart = rng.Next(1, mapWidth - housingWidth);
-        housingHeightStart = rng.Next(1, mapHeight - housingHeight);
-        bool canExit = false;
-        avgHeight = 0;
-
-        for (int z = 0; z < 10000; z++)
-        {
-            
-            if (canExit == true)
-            {
-                break;
-            }
-
-            canExit = true;
+            System.Random rng = new System.Random();
+            housingWidthStart = rng.Next(1, mapWidth - housingWidth);
+            housingHeightStart = rng.Next(1, mapHeight - housingHeight);
+            bool canExit = false;
             avgHeight = 0;
+
+            for (int z = 0; z < 10000; z++)
+            {
+
+                if (canExit == true)
+                {
+                    break;
+                }
+
+                canExit = true;
+                avgHeight = 0;
+
+                for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
+                {
+                    for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
+                    {
+                        if (noiseMap[i, j] < 0.32f || noiseMap[i, j] > 0.5f)
+                        {
+                            canExit = false;
+                            avgHeight = 0;
+                            housingWidthStart = rng.Next(1, mapWidth - housingWidth);
+                            housingHeightStart = rng.Next(1, mapHeight - housingHeight);
+                        }
+                        else
+                        {
+                            avgHeight += noiseMap[i, j];
+
+                        }
+                    }
+                }
+
+
+            }
+
+            avgHeight = avgHeight / ((housingWidth) * (housingHeight));
+
+
+            //if (avgHeight > 0.49f)
+            //  avgHeight = 0.49f;
+            //else if (avgHeight < 0.33f)
+            //  avgHeight = 0.33f;
 
             for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
             {
                 for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
                 {
-                    if (noiseMap[i, j] < 0.32f || noiseMap[i,j] > 0.5f)
-                    {
-                        canExit = false;
-                        avgHeight = 0;
-                        housingWidthStart = rng.Next(1, mapWidth - housingWidth);
-                        housingHeightStart = rng.Next(1, mapHeight - housingHeight);
-                    }
-                    else
-                    {
-                        avgHeight += noiseMap[i, j];
-                        
-                    }
+                    noiseMap[i, j] = avgHeight;
                 }
             }
-            
-            
-        }
 
-        avgHeight = avgHeight / ((housingWidth) * (housingHeight));
-
-
-        //if (avgHeight > 0.49f)
-          //  avgHeight = 0.49f;
-        //else if (avgHeight < 0.33f)
-          //  avgHeight = 0.33f;
-
-        for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
-        {
-            for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
+            //make an array with a size of the height of the map times the width of the map so each element in the array represents a pixel
+            Color[] colorMap = new Color[mapWidth * mapHeight];
+            for (int y = 0; y < mapHeight; y++)
             {
-                noiseMap[i, j] = avgHeight;
-            }
-        }
-
-        //make an array with a size of the height of the map times the width of the map so each element in the array represents a pixel
-        Color[] colorMap = new Color[mapWidth * mapHeight];
-        for (int y = 0; y < mapHeight; y++)
-        {
-            for (int x = 0; x < mapWidth; x++)
-            {
-                float currentHeight = noiseMap[x, y];
-                for (int i = 0; i < regions.Length; i++)
+                for (int x = 0; x < mapWidth; x++)
                 {
-                    if(currentHeight <= regions[i].height)
+                    float currentHeight = noiseMap[x, y];
+                    for (int i = 0; i < regions.Length; i++)
                     {
-                        colorMap[y * mapWidth + x] = regions[i].color;
-                        break;
+                        if (currentHeight <= regions[i].height)
+                        {
+                            colorMap[y * mapWidth + x] = regions[i].color;
+                            break;
+                        }
                     }
                 }
             }
-        }
 
-        noiseMapCopy = new float[mapWidth, mapHeight];
+            noiseMapCopy = new float[mapWidth, mapHeight];
 
-        for (int i = 0; i < mapWidth; i++)
-        {
-            for (int j = 0; j < mapHeight; j++)
+            for (int i = 0; i < mapWidth; i++)
             {
-                noiseMapCopy[i, j] = noiseMap[i, j];
+                for (int j = 0; j < mapHeight; j++)
+                {
+                    noiseMapCopy[i, j] = noiseMap[i, j];
+                }
             }
-        }
-        if (useTextureShader)
-        {
-            shader = Shader.Find("Custom/Terrain");
-            terrainMaterial.shader = shader;
-            UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
-        }
-        else if (useColourShader)
-        {
-            shader = Shader.Find("Custom/ColourShader");
-            terrainMaterial.shader = shader;
-            UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
+            if (shaderMode == ShaderMode.Texture)
+            {
+                shader = Shader.Find("Custom/Terrain");
+                terrainMaterial.shader = shader;
+                UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
+            }
+            else if (shaderMode == ShaderMode.Colour)
+            {
+                shader = Shader.Find("Custom/ColourShader");
+                terrainMaterial.shader = shader;
+                UpdateMeshHeights(terrainMaterial, minHeight, maxHeight);
+            }
+            else
+            {
+                shader = Shader.Find("Standard");
+                terrainMaterial.shader = shader;
+            }
+
+            MapDisplay display = FindObjectOfType<MapDisplay>();
+            if (drawMode == DrawMode.HeightMap)
+                display.DrawTexture(TextureGenerator.TextureHeightMap(noiseMap));
+            else if (drawMode == DrawMode.ColorMap)
+                display.DrawTexture(TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
+            else if (drawMode == DrawMode.Mesh)
+                display.DrawMesh(MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
+            //else if (drawMode == DrawMode.FalloffMap)
+                //display.DrawTexture(TextureGenerator.TextureHeightMap(FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight)));
+            UpdateDraw();
         }
         else
         {
-            shader = Shader.Find("Standard");
-            terrainMaterial.shader = shader;
+            System.Random rng = new System.Random(seed.GetHashCode());
+
+            randomFillPercent = 45;
+
+            map = new int[mapWidth, mapHeight];
+
+            for(int i = 0; i < mapWidth; i++)
+            {
+                for(int j = 0; j < mapHeight; j++)
+                {
+                    if (i == 0 || i == mapWidth - 1 || j == 0 || j == mapHeight - 1)
+                    {
+                        map[i, j] = 1;
+                    }
+                    else {
+                        map[i, j] = (rng.Next(0, 100) < randomFillPercent) ? 1 : 0;
+                    }
+                }
+            }
+
+            for (int x = 0; x < 10; x++)
+            {
+                for (int i = 0; i < mapWidth; i++)
+                {
+                    for (int j = 0; j < mapHeight; j++)
+                    {
+                        int neightbourWallTiles = GetSurroundingWallCount(i, j);
+
+                        if (neightbourWallTiles > 4)
+                        {
+                            map[i, j] = 1;
+                        }
+                        else if (neightbourWallTiles < 4)
+                        {
+                            map[i, j] = 0;
+                        }
+
+                    }
+                }
+            }
+
+            CellGenerator cellGen = GetComponent<CellGenerator>();
+            cellGen.GenerateMesh(map, 1);
+
         }
 
-        MapDisplay display = FindObjectOfType<MapDisplay>();
-        if (drawMode == DrawMode.HeightMap)
-            display.DrawTexture(TextureGenerator.TextureHeightMap(noiseMap));
-        else if (drawMode == DrawMode.ColorMap)
-            display.DrawTexture(TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
-        else if (drawMode == DrawMode.Mesh)
-            display.DrawMesh(MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve), TextureGenerator.TextureColorMap(colorMap, mapWidth, mapHeight));
-        else if (drawMode == DrawMode.FalloffMap)
-            display.DrawTexture(TextureGenerator.TextureHeightMap(FalloffGenerator.GenerateFalloffMap(mapWidth, mapHeight)));
-        UpdateDraw();
     }
+
+    int GetSurroundingWallCount(int gridX, int gridY)
+    {
+        int wallCount = 0;
+        for(int neighbourX = gridX -1; neighbourX <= gridX +1; neighbourX++)
+        {
+            for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
+            {
+                if (neighbourX >= 0 && neighbourX < mapWidth && neighbourY >= 0 && neighbourY < mapHeight)
+                {
+                    if (neighbourX != gridX || neighbourY != gridY)
+                    {
+                        wallCount += map[neighbourX, neighbourY];
+                    }
+                }
+                else
+                {
+                    wallCount++;
+                }
+            }
+        }
+
+        return wallCount;
+    }
+
+    //void OnDrawGizmos()
+    //{
+    //    if (terrainGT == TerrainGenerationType.CellularAutomata)
+    //    {
+    //        if (map != null)
+    //        {
+    //            for (int i = 0; i < mapWidth; i++)
+    //            {
+    //                for (int j = 0; j < mapHeight; j++)
+    //                {
+    //                    Gizmos.color = (map[i, j] == 1) ? Color.black : Color.white;
+    //                    Vector3 pos = new Vector3(-mapWidth / 2 + i + 0.5f, 0, -mapHeight / 2 + j + 0.5f);
+    //                    Gizmos.DrawCube(pos, new Vector3(10, 10, 10));
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
     //OnValidate allows me to apply restrictions to variables that the users will change in the inspector of Unity
     //This is useful as users may not know why the Octaves cannot be negative, etc.
     void OnValidate()
@@ -399,20 +500,15 @@ public class MapGenerator : MonoBehaviour {
                 mapWidth = 96;
                 mapHeight = 96;
             }
-            
         }
 
-        if(useColourShader)
+        if(terrainGT == TerrainGenerationType.CellularAutomata)
         {
-            useTextureShader = false;
-            useColourShader = true;            
-        }
+            mesh.SetActive(false);
 
-        if (useTextureShader)
-        {
-            useColourShader = false;
-            useTextureShader = true;            
         }
+        
+        
     }
 
     public void UpdateVariables()
@@ -478,14 +574,14 @@ public class MapGenerator : MonoBehaviour {
         material.SetFloat("minHeight", minHeight);
         material.SetFloat("maxHeight", maxHeight);
 
-        if (useColourShader)
+        if (shaderMode == ShaderMode.Colour)
         {
             material.SetInt("baseColourCount", baseColours.Length);
             material.SetColorArray("baseColours", baseColours);
             material.SetFloatArray("baseStartHeights", baseStartHeights);
             material.SetFloatArray("baseBlends", baseBlends);
         }
-        else if (useTextureShader)
+        else if (shaderMode == ShaderMode.Texture)
         {
             material.SetInt("baseColourCount", layers.Length);
             material.SetColorArray("baseColours", layers.Select(x => x.tint).ToArray());

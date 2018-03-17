@@ -137,6 +137,7 @@
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\Models\Not my Assets\Kitchen table with chair\Demo scene\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
     <Compile Include="Assets\Scripts\ArchitectureVegetationGenerator.cs" />
+    <Compile Include="Assets\Scripts\CellGenerator.cs" />
     <Compile Include="Assets\Scripts\FalloffGenerator.cs" />
     <Compile Include="Assets\Scripts\MapDisplay.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
