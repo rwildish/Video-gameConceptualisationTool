@@ -18,6 +18,9 @@ public class MapGenerator : MonoBehaviour {
     public enum TerrainGenerationType {PerlinNoise, CellularAutomata, ReverseCellularAutomata};
     [Tooltip("Determines which terrain generation type to use. Use PerlinNoise for a standard cuboid shaped terrain or CellullarAutomata for a more organicly shaped terrain")]
     public TerrainGenerationType terrainGenerationType;
+    public enum EnvironmentType {Custom, Forest, RainForest, Fields, Urban, City};
+    [Tooltip("Determines what environment time will be generated, some other options may change how this works")]
+    public EnvironmentType environmentType;
     public enum ShaderMode {Standard, Colour, Texture};
     [Tooltip("Determines which shader to use on the terrain")]
     public ShaderMode shaderMode;
@@ -44,10 +47,6 @@ public class MapGenerator : MonoBehaviour {
     public bool useFalloffMap;
     [Tooltip("Determines whether or not to use flatshading")]
     public bool useFlatShading;
-    //[Tooltip("Determines whether or not to use the colour shader")]
-    //public bool useColourShader;
-    //[Tooltip("Determines whether or not to use the texture shader")]
-    //public bool useTextureShader;
     [Tooltip("Determines the multiplied height of the mesh")]
     public float meshHeightMultiplier;
     [Tooltip("Allows for the flatness of water, whilst allowing other areas to gain height (Mesh only)")]
@@ -78,6 +77,7 @@ public class MapGenerator : MonoBehaviour {
     [Tooltip("Determines the housing area start (y axis)")]
     public int housingHeightStart;
     float[,] noiseMapCopy;
+    int[,] noiseMapBlocked;
     float avgHeight;
     public Material terrainMaterial;
     Shader shader;
@@ -182,13 +182,14 @@ public class MapGenerator : MonoBehaviour {
                     for (int j = 0; j < mapHeight; j++)
                     {
                         noiseMap[i, j] = Mathf.Clamp01(noiseMap[i, j] - falloffMap[i, j]);
+
                     }
                 }
             }
 
 
             //deepWater
-            if (useFalloffMap == false)
+            if (useFalloffMap == false) { 
                 for (int i = 1; i < mapWidth - 1; i++)
                 {
                     for (int j = 1; j < mapHeight - 1; j++)
@@ -213,7 +214,7 @@ public class MapGenerator : MonoBehaviour {
                 }
 
             //water
-            if (useFalloffMap == false)
+            
                 for (int i = 1; i < mapWidth - 1; i++)
                 {
                     for (int j = 1; j < mapHeight - 1; j++)
@@ -238,7 +239,7 @@ public class MapGenerator : MonoBehaviour {
                 }
 
             //sand
-            if (useFalloffMap == false)
+            
                 for (int i = 1; i < mapWidth - 1; i++)
                 {
                     for (int j = 1; j < mapHeight - 1; j++)
@@ -257,16 +258,35 @@ public class MapGenerator : MonoBehaviour {
                                 }
                             }
                             if (connectedHeight < 6)
-                                noiseMap[i, j] = UnityEngine.Random.Range(0.32f, 0.35f);
+                                noiseMap[i, j] = UnityEngine.Random.Range(0.32f, 0.34f);
                         }
                     }
                 }
+        }
+
+            noiseMapBlocked = new int[mapWidth, mapHeight];
+
+            for(int i = 0; i < mapWidth; i++)
+            {
+                for(int j = 0; j < mapHeight; j++)
+                {
+                    if(noiseMap[i,j] <= 0.31f || noiseMap[i,j] >= 0.5f)
+                    {
+                        noiseMapBlocked[i, j] = 1;
+                    }
+                    else
+                    {
+                        noiseMapBlocked[i, j] = 0;
+                    }
+                }
+            }
 
             System.Random rng = new System.Random();
             housingWidthStart = rng.Next(1, mapWidth - housingWidth);
             housingHeightStart = rng.Next(1, mapHeight - housingHeight);
             bool canExit = false;
             avgHeight = 0;
+            int blockedCounter = 0;
 
             for (int z = 0; z < 10000; z++)
             {
@@ -278,6 +298,7 @@ public class MapGenerator : MonoBehaviour {
 
                 canExit = true;
                 avgHeight = 0;
+                blockedCounter = 0;
 
                 for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
                 {
@@ -285,10 +306,16 @@ public class MapGenerator : MonoBehaviour {
                     {
                         if (noiseMap[i, j] < 0.32f || noiseMap[i, j] > 0.5f)
                         {
-                            canExit = false;
-                            avgHeight = 0;
-                            housingWidthStart = rng.Next(1, mapWidth - housingWidth);
-                            housingHeightStart = rng.Next(1, mapHeight - housingHeight);
+                            blockedCounter++;
+
+                            if (blockedCounter > (housingWidth * housingHeight) / 10)
+                            {
+                                canExit = false;
+                                avgHeight = 0;
+                                housingWidthStart = rng.Next(1, mapWidth - housingWidth);
+                                housingHeightStart = rng.Next(1, mapHeight - housingHeight);
+                                
+                            }
                         }
                         else
                         {
@@ -301,7 +328,7 @@ public class MapGenerator : MonoBehaviour {
 
             }
 
-            avgHeight = avgHeight / ((housingWidth) * (housingHeight));
+            avgHeight = avgHeight / (housingWidth * housingHeight - blockedCounter);
 
 
             //if (avgHeight > 0.49f)
@@ -313,7 +340,40 @@ public class MapGenerator : MonoBehaviour {
             {
                 for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
                 {
-                    noiseMap[i, j] = avgHeight;
+                    if(noiseMapBlocked[i,j] == 1)
+                    {
+                        int connectedBlocks = 0;
+                        for(int x = i-1; x < i + 1; x++)
+                        {
+                            for (int y = j - 1; y < j + 1; y++)
+                            {
+                                if(x == i && y == j)
+                                {
+                                    continue;
+                                }
+                                else if(noiseMapBlocked[x,y] == 1)
+                                {
+                                    connectedBlocks++;
+                                }
+                            }
+                        }
+
+                        if(connectedBlocks == 0)
+                        {
+                            noiseMap[i, j] = avgHeight;
+                        }
+
+                        if(noiseMap[i,j] > avgHeight + 0.07f)
+                        {
+                            noiseMap[i, j] = UnityEngine.Random.Range(avgHeight + 0.03f, avgHeight + 0.07f);
+                        }
+                    }
+                    else
+                    {
+                        noiseMap[i, j] = avgHeight;
+                        //Debug.Log("Set avgHeight");
+                    }
+                    
                 }
             }
 
