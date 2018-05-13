@@ -270,7 +270,11 @@ public class MapGenerator : MonoBehaviour {
             {
                 for(int j = 0; j < mapHeight; j++)
                 {
-                    if(noiseMap[i,j] <= 0.31f || noiseMap[i,j] >= 0.5f)
+                    if (noiseMap[i, j] <= 0.31f || noiseMap[i, j] >= 0.5f)
+                    {
+                        noiseMapBlocked[i, j] = 1;
+                    }
+                    else if (i == 0 || i == mapWidth || j == mapWidth || j == 0)
                     {
                         noiseMapBlocked[i, j] = 1;
                     }
@@ -336,9 +340,9 @@ public class MapGenerator : MonoBehaviour {
             //else if (avgHeight < 0.33f)
             //  avgHeight = 0.33f;
 
-            for (int i = housingWidthStart; i < housingWidthStart + housingWidth; i++)
+            for (int i = housingWidthStart - 1; i < housingWidthStart + housingWidth + 1; i++)
             {
-                for (int j = housingHeightStart; j < housingHeightStart + housingHeight; j++)
+                for (int j = housingHeightStart - 1; j < housingHeightStart + housingHeight + 1; j++)
                 {
                     if(noiseMapBlocked[i,j] == 1)
                     {
@@ -404,6 +408,26 @@ public class MapGenerator : MonoBehaviour {
                     noiseMapCopy[i, j] = noiseMap[i, j];
                 }
             }
+
+            for (int i = 0; i < mapWidth; i++)
+            {
+                for (int j = 0; j < mapHeight; j++)
+                {
+                    if (noiseMap[i, j] <= 0.31f || noiseMap[i, j] >= 0.4f)
+                    {
+                        noiseMapBlocked[i, j] = 1;
+                    }
+                    else if (i == 0 || i == mapWidth || j == mapWidth || j == 0 || i == housingWidthStart || i == housingWidthStart + housingWidth - 1 || j == housingHeightStart || j == housingHeightStart + housingHeight - 1)
+                    {
+                        noiseMapBlocked[i, j] = 1;
+                    }
+                    else
+                    {
+                        noiseMapBlocked[i, j] = 0;
+                    }
+                }
+            }
+
             if (shaderMode == ShaderMode.Texture)
             {
                 shader = Shader.Find("Custom/Terrain");
@@ -1097,6 +1121,10 @@ public class MapGenerator : MonoBehaviour {
     public float[,] GetNoiseMap()
     {
         return noiseMapCopy;
+    }
+    public int[,] GetNoiseMapBlocked()
+    {
+        return noiseMapBlocked;
     }
 
     public float GetAvgHeight()
