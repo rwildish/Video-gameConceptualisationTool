@@ -266,4 +266,12 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
         }
     }
 
+    public void DeleteHousing()
+    {
+        foreach (GameObject m in architectureModels)
+            DestroyImmediate(m);
+
+        architectureModels.Clear();
+    }
+
 }
