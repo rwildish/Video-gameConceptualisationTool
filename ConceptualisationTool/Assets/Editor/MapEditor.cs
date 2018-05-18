@@ -13,7 +13,6 @@ public class MapEditor : Editor {
         GameObject userOpt = GameObject.Find("Options");
         UserOptions userOptions = userOpt.GetComponent<UserOptions>();
         UserAdvancedOptions userAdvancedOptions = userOpt.GetComponent<UserAdvancedOptions>();
-        
 
         if (DrawDefaultInspector())
         {
@@ -36,16 +35,6 @@ public class MapEditor : Editor {
             mapGen.GenerateMap();
             
         }
-
-        GameObject arcVeg = GameObject.Find("MapGenerator");
-        ArchitectureVegetationGenerator arcVegGen = arcVeg.GetComponent<ArchitectureVegetationGenerator>();
-
-        if (GUILayout.Button("Delete Housing"))
-        {
-            arcVegGen.DeleteHousing();
-        }
-
-
     }
 
     
