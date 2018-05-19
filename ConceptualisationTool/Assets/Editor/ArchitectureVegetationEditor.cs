@@ -23,6 +23,11 @@ public class ArchitectureVegetationEditor : Editor {
             arcVegGen.DeleteObjectsFromList();
 
         }
+
+        if(GUILayout.Button("Generate Models"))
+        {
+            arcVegGen.GenerateArchitecture();
+        }
     }
 
 }

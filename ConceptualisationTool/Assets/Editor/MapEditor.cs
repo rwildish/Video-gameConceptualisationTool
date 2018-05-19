@@ -35,7 +35,17 @@ public class MapEditor : Editor {
             mapGen.GenerateMap();
             
         }
+
+        if(GUILayout.Button("Generate Models"))
+        {
+            GameObject arcVeg = GameObject.Find("MapGenerator");
+            ArchitectureVegetationGenerator arcVegGen = arcVeg.GetComponent<ArchitectureVegetationGenerator>();
+
+            arcVegGen.GenerateArchitecture();
+        }
     }
+
+    
 
     
 }

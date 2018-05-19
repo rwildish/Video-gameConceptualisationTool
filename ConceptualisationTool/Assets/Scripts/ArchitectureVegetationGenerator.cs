@@ -32,6 +32,10 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
     //GameObject newHouse;
     List<GameObject> architectureModels;
 
+    void Start()
+    {
+        //architectureModels = null;
+    }
 
     public void GenerateArchitecture()
     {
@@ -51,15 +55,22 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
         noiseMapBlocked = mapGenerator.GetNoiseMapBlocked();
 
         //initialising list to allow for deleting from list
-        architectureModels.Add(Instantiate(housePrefab, new Vector3(-mapWidth * 5 + housingWidthStart * 10, noiseMap[housingWidthStart, housingHeightStart] * heightMultiplier / 2 + 0.1f, mapHeight * 5 - housingHeightStart * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+        //architectureModels.Add(Instantiate(housePrefab, new Vector3(-mapWidth * 5 + housingWidthStart * 10, noiseMap[housingWidthStart, housingHeightStart] * heightMultiplier / 2 + 0.1f, mapHeight * 5 - housingHeightStart * 10), Quaternion.Euler(0, 0, 0), transform.parent));
 
         //On start up of the project, whenever the project has been re-opened *only on a restart of pc or on new pc* please come to this script and comment out the 3 lines following this comment, save the file, go back to Unity and wait for it to load in the script, come back to this script and uncomment these lines, 
         //save and the generating of the architecture and vegetation should work.
-        if (architectureModels.Count > 0)
-            foreach (GameObject m in architectureModels)
-                DestroyImmediate(m);
+        try {
+            if (architectureModels.Count > 0)
+                foreach (GameObject m in architectureModels)
+                    DestroyImmediate(m);
+        }
+        catch 
+        {
+            Debug.Log("List has not been initialised");
+            architectureModels = new List<GameObject>();
+        }
 
-
+        //architectureModels = null;
 
         //spawn houses
         if (housingLayoutMode == HousingLayoutMode.Detached) { 
@@ -70,8 +81,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                     if (noiseMapBlocked[housingWidthStart + x, housingHeightStart + y] == 1)
                     {
                         Debug.Log(x + " " + y + " " + noiseMapBlocked[x + housingWidthStart, y + housingHeightStart]);
-                        //Debug.Log(x + " " + y);
-                        //continue;
+                        
                         if (y % 2 == 0)
                         {
                             if (y == 0 && x != 0)
@@ -273,6 +283,15 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                 }
             }
         }
+        else if(housingLayoutMode == HousingLayoutMode.SemiDetached)
+        {
+
+        }
+        else if(housingLayoutMode == HousingLayoutMode.Terraced)
+        {
+
+        }
+
         GenerateVegetation();
     }
 
