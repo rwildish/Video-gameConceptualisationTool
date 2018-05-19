@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArchitectureVegetationGenerator : MonoBehaviour {
+public class ArchitectureVegetationGenerator : MonoBehaviour
+{
 
     float[,] noiseMap;
     int[,] noiseMapBlocked;
@@ -27,7 +28,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
     public GameObject roadStraight;
     //GameObject newHouse;
     List<GameObject> architectureModels;
-    
+
 
     public void GenerateArchitecture()
     {
@@ -52,13 +53,13 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
         //On start up of the project, whenever the project has been re-opened *only on a restart of pc or on new pc* please come to this script and comment out the 3 lines following this comment, save the file, go back to Unity and wait for it to load in the script, come back to this script and uncomment these lines, 
         //save and the generating of the architecture and vegetation should work.
         if (architectureModels.Count > 0)
-            foreach(GameObject m in architectureModels)
+            foreach (GameObject m in architectureModels)
                 DestroyImmediate(m);
 
 
-        
+
         //spawn houses
-        for (int x = 0; x <  housingWidth; x++)
+        for (int x = 0; x < housingWidth; x++)
         {
             for (int y = 0; y < housingHeight; y++)
             {
@@ -72,12 +73,12 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                         if (y == 0 && x != 0)
                         {
                             architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, -90, 0), transform.parent));
-                            if(x != housingWidth - 1)
+                            if (x != housingWidth - 1)
                                 architectureModels.Add(Instantiate(roads[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 7), Quaternion.Euler(-90, -90, 0), transform.parent));
 
 
                         }
-                        else if(x == housingWidth - 1 && y != 0 && y != housingHeight -1)
+                        else if (x == housingWidth - 1 && y != 0 && y != housingHeight - 1)
                         {
                             //architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, -90, 0), transform.parent));
                             architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1), Quaternion.Euler(-90, 0, 0), transform.parent));
@@ -86,18 +87,18 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
 
                         }
                     }
-                    else if(x == housingWidth - 1 && y != 0 && y != housingHeight - 1)
+                    else if (x == housingWidth - 1 && y != 0 && y != housingHeight - 1)
                     {
                         architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3), Quaternion.Euler(-90, 0, 0), transform.parent));
 
                     }
-                   
+
 
                 }
                 else if (noiseMapBlocked[housingWidthStart + x, housingHeightStart + y] == 0)
                 {
                     int result = (int)(Mathf.PerlinNoise(housingWidthStart + x / 10.0f, housingWidthStart + y / 10.0f) * 24);
-                    
+
                     Debug.Log(x + " " + y + " " + noiseMapBlocked[x + housingWidthStart, y + housingHeightStart]);
 
                     if (y == 0 || y % 2 == 0)
@@ -105,7 +106,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                         architectureModels.Add(Instantiate(roads[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 7), Quaternion.Euler(-90, -90, 0), transform.parent));
                         //architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1), Quaternion.Euler(-90, 0, 0), transform.parent));
 
-                        
+
 
 
                     }
@@ -135,7 +136,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                         architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 180, 0), transform.parent));
 
                     }
-                    
+
                     else if (x == housingWidth - 1)
                     {
                         architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 0, 0), transform.parent));
@@ -153,11 +154,11 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                             //architectureModels.Add(Instantiate(roads[3], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 0, 0), transform.parent));
                         }
                     }
-                    
+
 
                     if (result < 2)
                     {
-                        if(y == 0 || y % 2 == 0)
+                        if (y == 0 || y % 2 == 0)
                             architectureModels.Add(Instantiate(houseBuildings[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10), Quaternion.Euler(0, -90, 0), transform.parent));
                         else if (y % 2 == 1)
                         {
@@ -260,7 +261,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                             architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10), Quaternion.Euler(0, -90, 0), transform.parent));
                         else if (y % 2 == 1)
                         {
-                            architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 -4f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 4f), Quaternion.Euler(0, 90, 0), transform.parent));
                         }
                     }
                 }
@@ -277,20 +278,20 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
         int treeStart1X = rng.Next(21, mapWidth - 21);
         int treeStart1Y = rng.Next(21, mapHeight - 21);
 
-        int treeStart2X = rng.Next(21 , mapWidth - 21);
+        int treeStart2X = rng.Next(21, mapWidth - 21);
         int treeStart2Y = rng.Next(21, mapHeight - 21);
 
         int treeStart3X = rng.Next(21, mapWidth - 21);
-        int treeStart3Y = rng.Next(21 , mapHeight - 21);
+        int treeStart3Y = rng.Next(21, mapHeight - 21);
 
-        if(noiseMapBlocked[treeStart1X,treeStart1Y] == 1)
+        if (noiseMapBlocked[treeStart1X, treeStart1Y] == 1)
         {
             for (int i = 0; i < 1000000; i++)
             {
                 treeStart1X = rng.Next(21, mapWidth - 21);
                 treeStart1Y = rng.Next(21, mapHeight - 21);
 
-                if(noiseMapBlocked[treeStart1X, treeStart1Y] == 0)
+                if (noiseMapBlocked[treeStart1X, treeStart1Y] == 0)
                 {
                     i = 1000000;
                 }
@@ -340,9 +341,21 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
         double randomTreeRotation = 0;
         float treeRotation = 0;
         GameObject lastTree = null;
+        int chanceOfSpawn = 0;
+        int[,] flowerMap = new int[mapWidth, mapHeight];
+
+        
+
+        for (int i = 0; i < mapWidth; i++)
+        {
+            for (int j = 0; j < mapHeight; j++)
+            {
+                flowerMap[i,j] = (int) noiseMapBlocked.GetValue(i, j);
+            }
+        }
 
         //generate 3 ancestor trees
-        for (int i = 0; i < 6; i+=2)
+        for (int i = 0; i < 6; i += 2)
         {
             randomTree = rng.Next(0, 10);
             randomTreeRotation = rng.NextDouble() * 360;
@@ -350,21 +363,24 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
             architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + treeStarts[i] * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - treeStarts[i + 1] * 10), Quaternion.Euler(0, treeRotation, 0), transform.parent));
             listCount = architectureModels.Count;
             lastTree = architectureModels[listCount - 1];
-             randomTreeScaleVariance = (float) rng.Next(18000, 22000) / 10000;
+            randomTreeScaleVariance = (float)rng.Next(18000, 22000) / 10000;
             lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
             noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
         }
+
+        int positionPosNegChance = 0;
+
         //generate forests
-        for(int i = 0; i < 6; i += 2)
+        for (int i = 0; i < 6; i += 2)
         {
-            for(int j = treeStarts[i] - 20; j < treeStarts[i] + 20; j++)
+            for (int j = treeStarts[i] - 20; j < treeStarts[i] + 20; j++)
             {
-                for(int k = treeStarts[i+1] - 20; k < treeStarts[i+1] + 20; k++)
+                for (int k = treeStarts[i + 1] - 20; k < treeStarts[i + 1] + 20; k++)
                 {
                     if (noiseMapBlocked[j, k] == 0)
                     {
                         randomTree = rng.Next(0, 10);
-                        int chanceOfSpawn = 0;
+                        chanceOfSpawn = 0;
                         listCount = 0;
                         randomTreeRotation = rng.NextDouble() * 360;
                         treeRotation = (float)randomTreeRotation;
@@ -373,7 +389,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
 
                         treePositionVarianceX = rng.NextDouble() * 3;
                         treePositionVarianceY = rng.NextDouble() * 3;
-                        int positionPosNegChance = rng.Next(0, 100);
+                        positionPosNegChance = rng.Next(0, 100);
                         if (positionPosNegChance < 50)
                         {
                             treePositionVarianceX *= -1;
@@ -390,12 +406,12 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                             Debug.Log(chanceOfSpawn);
                             if (chanceOfSpawn > 92)
                             {
-                                
-                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float) treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float) treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
+
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(8500, 9500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(8500, 9500) / 10000;
+
                             }
 
                         }
@@ -409,8 +425,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(9000, 10000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(9000, 10000) / 10000;
+
                             }
 
                         }
@@ -423,8 +439,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(9500, 10500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(9500, 10500) / 10000;
+
                             }
 
                         }
@@ -437,8 +453,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(10000, 11000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(10000, 11000) / 10000;
+
                             }
 
                         }
@@ -451,8 +467,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(10500, 11500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(10500, 11500) / 10000;
+
                             }
 
                         }
@@ -465,8 +481,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(11000, 12000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(11000, 12000) / 10000;
+
                             }
 
                         }
@@ -479,8 +495,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(11500, 12500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(11500, 12500) / 10000;
+
                             }
 
                         }
@@ -493,8 +509,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(12000, 13000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(12000, 13000) / 10000;
+
                             }
 
                         }
@@ -507,8 +523,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(12500, 13500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(12500, 13500) / 10000;
+
                             }
 
                         }
@@ -521,8 +537,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(13000, 14000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(13000, 14000) / 10000;
+
                             }
 
                         }
@@ -535,8 +551,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(13500, 14500) / 10000;
-                               
+                                randomTreeScaleVariance = (float)rng.Next(13500, 14500) / 10000;
+
                             }
 
                         }
@@ -549,8 +565,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(14000, 15000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(14000, 15000) / 10000;
+
                             }
 
                         }
@@ -563,8 +579,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(14500, 15500) / 10000;
-                               
+                                randomTreeScaleVariance = (float)rng.Next(14500, 15500) / 10000;
+
                             }
 
                         }
@@ -578,7 +594,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(15000, 16000) / 10000;
-                                
+
                             }
 
                         }
@@ -591,8 +607,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(15500, 16500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(15500, 16500) / 10000;
+
                             }
 
                         }
@@ -605,8 +621,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(16000, 17000) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(16000, 17000) / 10000;
+
                             }
                         }
                         else if (j == treeStarts[i] - 3 || k == treeStarts[i + 1] - 3 || j == treeStarts[i] + 3 || k == treeStarts[i + 1] + 3)
@@ -618,8 +634,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(16500, 17500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(16500, 17500) / 10000;
+
                             }
                         }
                         else if (j == treeStarts[i] - 2 || k == treeStarts[i + 1] - 2 || j == treeStarts[i] + 2 || k == treeStarts[i + 1] + 2)
@@ -631,8 +647,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(17000, 18000) / 10000;
-                               
+                                randomTreeScaleVariance = (float)rng.Next(17000, 18000) / 10000;
+
                             }
                         }
                         else if (j == treeStarts[i] - 1 || k == treeStarts[i + 1] - 1 || j == treeStarts[i] + 1 || k == treeStarts[i + 1] + 1)
@@ -644,8 +660,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[j, k]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
-                                randomTreeScaleVariance = (float) rng.Next(17500, 18500) / 10000;
-                                
+                                randomTreeScaleVariance = (float)rng.Next(17500, 18500) / 10000;
+
                             }
                         }
                         else
@@ -659,12 +675,15 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                 }
             }
         }
+
+
+
         //generate trees outside of forests
         for (int i = 0; i < mapWidth; i++)
         {
             for (int j = 0; j < mapHeight; j++)
             {
-                if(noiseMapBlocked[i,j] == 0)
+                if (noiseMapBlocked[i, j] == 0)
                 {
                     int chanceToSpawn = rng.Next(0, 100);
 
@@ -678,7 +697,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
 
                         treePositionVarianceX = rng.NextDouble() * 3;
                         treePositionVarianceY = rng.NextDouble() * 3;
-                        int positionPosNegChance = rng.Next(0, 100);
+                        positionPosNegChance = rng.Next(0, 100);
                         if (positionPosNegChance < 50)
                         {
                             treePositionVarianceX *= -1;
@@ -694,7 +713,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                         lastTree = architectureModels[listCount - 1];
                         randomTreeScaleVariance = (float)rng.Next(14500, 15500) / 10000;
                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
-                        noiseMapBlocked[i,j] = 1;
+                        noiseMapBlocked[i, j] = 1;
 
                         for (int k = -2; k < 2; k++)
                         {
@@ -704,12 +723,12 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                 if (i > 3 && j > 3 && i < mapWidth - 3 && j < mapHeight - 3 && noiseMapBlocked[i + k, j + l] == 0)
                                 {
                                     chanceToSpawn = rng.Next(0, 100);
-                                    
+
                                     if (chanceToSpawn < 75)
                                     {
-                                        
+
                                         randomTree = rng.Next(0, 10);
-                                        listCount = 0;
+                                        //listCount = 0;
                                         randomTreeRotation = rng.NextDouble() * 360;
                                         treeRotation = (float)randomTreeRotation;
                                         randomTreeScaleVariance = 0;
@@ -728,7 +747,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                                             treePositionVarianceY *= -1;
                                         }
 
-                                        architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + i + k * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[i + k, j + l]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - j - l * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
+                                        architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + (i + k) * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[i + k, j + l]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - (j - l) * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
                                         listCount = architectureModels.Count;
                                         lastTree = architectureModels[listCount - 1];
                                         randomTreeScaleVariance = (float)rng.Next(8500, 12500) / 10000;
@@ -744,8 +763,91 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
             }
         }
 
+        
+        for (int i = 0; i < mapWidth; i++)
+        {
+            for (int j = 0; j < mapHeight; j++)
+            {
+                flowerMap[i, j] = 0;
+            }
+        }
 
+        for (int i = 3; i < mapWidth - 3; i++)
+        {
+            for (int j = 3; j < mapHeight - 3; j++)
+            {
+                if (noiseMapBlocked[i,j] == 0) { 
+                int randomFlower = rng.Next(0, 8);
+                chanceOfSpawn = rng.Next(0, 100);
+
+                    if (chanceOfSpawn < 4)
+                    {
+
+                        randomTreeRotation = rng.NextDouble() * 360;
+                        treeRotation = (float)randomTreeRotation;
+
+                        treePositionVarianceX = rng.NextDouble() * 3;
+                        treePositionVarianceY = rng.NextDouble() * 3;
+                        positionPosNegChance = rng.Next(0, 100);
+                        if (positionPosNegChance < 50)
+                        {
+                            treePositionVarianceX *= -1;
+                        }
+                        positionPosNegChance = rng.Next(0, 100);
+                        if (positionPosNegChance < 50)
+                        {
+                            treePositionVarianceY *= -1;
+                        }
+
+                        architectureModels.Add(Instantiate(flowers[randomFlower], new Vector3(-mapWidth * 5 + i * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[i, j]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - j * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
+                        listCount = architectureModels.Count;
+                        lastTree = architectureModels[listCount - 1];
+                        randomTreeScaleVariance = (float)rng.Next(8500, 11500) / 10000;
+                        lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
+                        flowerMap[i, j] = 1;
+
+                        for (int k = -2; k < 2; k++)
+                        {
+                            for (int l = -2; l < 2; l++)
+                            {
+                                if(noiseMapBlocked[i + k, j + l] == 0) { 
+                                chanceOfSpawn = rng.Next(0, 100);
+
+                                    if (chanceOfSpawn < 75)
+                                    {
+
+                                        randomTreeRotation = rng.NextDouble() * 360;
+                                        treeRotation = (float)randomTreeRotation;
+
+                                        treePositionVarianceX = rng.NextDouble() * 3;
+                                        treePositionVarianceY = rng.NextDouble() * 3;
+                                        positionPosNegChance = rng.Next(0, 100);
+                                        if (positionPosNegChance < 50)
+                                        {
+                                            treePositionVarianceX *= -1;
+                                        }
+                                        positionPosNegChance = rng.Next(0, 100);
+                                        if (positionPosNegChance < 50)
+                                        {
+                                            treePositionVarianceY *= -1;
+                                        }
+
+                                        architectureModels.Add(Instantiate(flowers[randomFlower], new Vector3(-mapWidth * 5 + (i + k) * 10 + (float)treePositionVarianceX, heightCurve.Evaluate(noiseMap[i + k, j + l]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - (j - l) * 10 - (float)treePositionVarianceY), Quaternion.Euler(0, treeRotation, 0), transform.parent));
+                                        listCount = architectureModels.Count;
+                                        lastTree = architectureModels[listCount - 1];
+                                        randomTreeScaleVariance = (float)rng.Next(8500, 11500) / 10000;
+                                        lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
+                                        flowerMap[i + k, j + l] = 1;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
 
     }
-
 }
