@@ -273,7 +273,7 @@ public class MapGenerator : MonoBehaviour {
                         {
                             blockedCounter++;
 
-                            if (blockedCounter > (housingWidth * housingHeight) / 10)
+                            if (blockedCounter > (housingWidth * housingHeight) / 20)
                             {
                                 canExit = false;
                                 avgHeight = 0;
@@ -378,7 +378,7 @@ public class MapGenerator : MonoBehaviour {
                     {
                         noiseMapBlocked[i, j] = 1;
                     }
-                    else if (i == 0 || i == mapWidth || j == mapWidth || j == 0 || i == housingWidthStart || i == housingWidthStart + housingWidth - 1 || j == housingHeightStart || j == housingHeightStart + housingHeight - 1)
+                    else if (i == 0 || i == mapWidth || j == mapWidth || j == 0)
                     {
                         noiseMapBlocked[i, j] = 1;
                     }

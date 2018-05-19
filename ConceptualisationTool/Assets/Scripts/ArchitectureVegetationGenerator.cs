@@ -290,6 +290,168 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
         else if(housingLayoutMode == HousingLayoutMode.Terraced)
         {
 
+            for(int x = 0; x < housingWidth + 1; x++)
+            {
+
+                if(x == 10)
+                {
+
+                    x++;
+                }
+
+                for(int y = 0; y < housingHeight; y++)
+                {
+                    if(noiseMapBlocked[housingWidthStart + x, housingHeightStart + y] == 1)
+                    {
+
+                    }
+                    else
+                    {
+                        int result = (int)(Mathf.PerlinNoise(housingWidthStart + x / 10.0f, housingWidthStart + y / 10.0f) * 24);
+
+                        if(x == 11)
+                        {
+                            int tempX = 10;
+
+                            if (y == 0 || y % 2 == 0)
+                            {
+                                architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + tempX) * 10 - (4.51f * tempX), heightCurve.Evaluate(noiseMap[housingWidthStart + tempX, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 0.95f), Quaternion.Euler(-90, 0, 0), transform.parent));
+
+                            }
+                            else
+                            {
+                                architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + tempX) * 10 - (4.51f * tempX), heightCurve.Evaluate(noiseMap[housingWidthStart + tempX, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.7f), Quaternion.Euler(-90, 0, 0), transform.parent));
+                            }
+                            noiseMapBlocked[housingWidthStart + tempX, housingHeightStart + y] = 1;
+
+                            architectureModels.Add(Instantiate(roads[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 7.3f), Quaternion.Euler(-90, -90, 0), transform.parent));
+
+
+                            if (y == 0 || y % 2 == 0)
+                            {
+                                architectureModels.Add(Instantiate(roads[3], new Vector3((-mapWidth * 5 + (housingWidthStart + tempX) * 10 - (4.51f * tempX)), heightCurve.Evaluate(noiseMap[housingWidthStart + tempX, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7.3f)), Quaternion.Euler(-90, 0, 0), transform.parent));
+                            }
+                        }else if (y == 0 || y % 2 == 0)
+                        {
+                            architectureModels.Add(Instantiate(roads[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 7.3f), Quaternion.Euler(-90, -90, 0), transform.parent));
+
+                        }
+
+                        if (result < 2)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 4)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 6)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[2], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[2], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 8)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[3], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[3], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 10)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[4], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[4], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 12)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[5], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[5], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 14)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[6], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[6], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 16)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[7], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[7], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 18)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[8], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[8], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 20)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[9], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[9], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 22)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[10], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[10], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                        else if (result < 24)
+                        {
+                            if (y == 0 || y % 2 == 0)
+                                architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1f), Quaternion.Euler(0, -90, 0), transform.parent));
+                            else if (y % 2 == 1)
+                            {
+                                architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - (4.51f * x) + 0.22f, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3.6f), Quaternion.Euler(0, 90, 0), transform.parent));
+                            }
+                        }
+                    }
+                    noiseMapBlocked[housingWidthStart + x, housingHeightStart + y] = 1;
+                }
+            }
+
+            
+
         }
 
         GenerateVegetation();
