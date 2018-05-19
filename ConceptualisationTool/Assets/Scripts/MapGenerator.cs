@@ -389,6 +389,42 @@ public class MapGenerator : MonoBehaviour {
                 }
             }
 
+            int[,] blockedNodes = new int[mapWidth, mapHeight];
+
+            for (int i = 0; i < mapWidth; i++)
+            {
+                for (int j = 0; j < mapHeight; j++)
+                {
+                    if(noiseMapBlocked[i,j] == 1)
+                    {
+                        blockedNodes[i, j] = 1;
+                    }
+                    else
+                    {
+                        blockedNodes[i, j] = 0;
+                    }
+                }
+            }
+
+            for (int i = 1; i < mapWidth - 1; i++)
+            {
+                for (int j = 1; j < mapHeight - 1; j++)
+                {
+                    if(blockedNodes[i,j] == 1)
+                    {
+                        for (int k = -1; k < 2; k++)
+                        {
+                            for (int l = -1; l < 2; l++)
+                            {
+                               
+                               noiseMapBlocked[i + k, j + l] = 1;
+                                
+                            }
+                        }
+                    }
+                }
+            }
+
             if (shaderMode == ShaderMode.Texture)
             {
                 shader = Shader.Find("Custom/Terrain");

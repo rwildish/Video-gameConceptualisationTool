@@ -94,7 +94,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                             }
                             else if (x == housingWidth - 1 && y != 0 && y != housingHeight - 1)
                             {
-                                //architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, -90, 0), transform.parent));
+                                architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, -90, 0), transform.parent));
                                 architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1), Quaternion.Euler(-90, 0, 0), transform.parent));
                                 architectureModels.Add(Instantiate(roads[2], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 0, 0), transform.parent));
 
@@ -118,7 +118,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         if (y == 0 || y % 2 == 0)
                         {
                             architectureModels.Add(Instantiate(roads[0], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 7), Quaternion.Euler(-90, -90, 0), transform.parent));
-                            //architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1), Quaternion.Euler(-90, 0, 0), transform.parent));
+                            architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 1), Quaternion.Euler(-90, 0, 0), transform.parent));
 
 
 
@@ -126,7 +126,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         }
                         else if (y % 2 == 1)
                         {
-                            //architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3), Quaternion.Euler(-90, 0, 0), transform.parent));
+                            architectureModels.Add(Instantiate(roads[1], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10 - 5, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 - 3), Quaternion.Euler(-90, 0, 0), transform.parent));
                         }
 
                         if (x == 1 && y == 1)
@@ -165,7 +165,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         {
                             if (y == 0 || y % 2 == 0)
                             {
-                                //architectureModels.Add(Instantiate(roads[3], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 0, 0), transform.parent));
+                                architectureModels.Add(Instantiate(roads[3], new Vector3((-mapWidth * 5 + (housingWidthStart + x) * 10 - 5), heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10 + 0.001f, (mapHeight * 5 - (housingHeightStart + y) * 10 - 7)), Quaternion.Euler(-90, 0, 0), transform.parent));
                             }
                         }
 
@@ -742,9 +742,9 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                         noiseMapBlocked[i, j] = 1;
 
-                        for (int k = -2; k < 2; k++)
+                        for (int k = -2; k < 3; k++)
                         {
-                            for (int l = -2; l < 2; l++)
+                            for (int l = -2; l < 3; l++)
                             {
 
                                 if (i > 3 && j > 3 && i < mapWidth - 3 && j < mapHeight - 3 && noiseMapBlocked[i + k, j + l] == 0)
@@ -791,19 +791,19 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
         }
 
         
-        for (int i = 0; i < mapWidth; i++)
-        {
-            for (int j = 0; j < mapHeight; j++)
-            {
-                flowerMap[i, j] = 0;
-            }
-        }
+        //for (int i = 0; i < mapWidth; i++)
+        //{
+        //    for (int j = 0; j < mapHeight; j++)
+        //    {
+        //        flowerMap[i, j] = 0;
+        //    }
+        //}
 
         for (int i = 3; i < mapWidth - 3; i++)
         {
             for (int j = 3; j < mapHeight - 3; j++)
             {
-                if (noiseMapBlocked[i,j] == 0) { 
+                if (flowerMap[i,j] == 0) { 
                 int randomFlower = rng.Next(0, 8);
                 chanceOfSpawn = rng.Next(0, 100);
 
@@ -833,11 +833,11 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                         flowerMap[i, j] = 1;
 
-                        for (int k = -2; k < 2; k++)
+                        for (int k = -2; k < 3; k++)
                         {
-                            for (int l = -2; l < 2; l++)
+                            for (int l = -2; l < 3; l++)
                             {
-                                if(noiseMapBlocked[i + k, j + l] == 0) { 
+                                if(flowerMap[i + k, j + l] == 0) { 
                                 chanceOfSpawn = rng.Next(0, 100);
 
                                     if (chanceOfSpawn < 75)
