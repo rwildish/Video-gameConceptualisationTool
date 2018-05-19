@@ -143,6 +143,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\ArchitectureVegetationEditor.cs" />
     <Compile Include="Assets\Editor\MapEditor.cs" />
     <Compile Include="Assets\Editor\UserAdvancedOptionsEditor.cs" />
     <Compile Include="Assets\Editor\UserOptionsEditor.cs" />
