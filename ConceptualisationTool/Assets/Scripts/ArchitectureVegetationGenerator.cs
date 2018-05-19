@@ -24,8 +24,9 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
     public GameObject housePrefab;
     public GameObject roadL;
     public GameObject roadStraight;
-    GameObject newHouse;
+    //GameObject newHouse;
     List<GameObject> architectureModels;
+    
 
     public void GenerateArchitecture()
     {
@@ -261,9 +262,178 @@ public class ArchitectureVegetationGenerator : MonoBehaviour {
                             architectureModels.Add(Instantiate(houseBuildings[11], new Vector3(-mapWidth * 5 + (housingWidthStart + x) * 10, heightCurve.Evaluate(noiseMap[housingWidthStart + x, housingHeightStart + y]) * heightMultiplier * 10, mapHeight * 5 - (housingHeightStart + y) * 10 -4f), Quaternion.Euler(0, 90, 0), transform.parent));
                         }
                     }
-                }          
+                }
+                noiseMapBlocked[housingWidthStart + x, housingHeightStart + y] = 1;
             }
         }
+        GenerateVegetation();
+    }
+
+    public void GenerateVegetation()
+    {
+
+        System.Random rng = new System.Random();
+        int treeStart1X = rng.Next(50, mapWidth - 50);
+        int treeStart1Y = rng.Next(50, mapHeight - 50);
+
+        int treeStart2X = rng.Next(50 , mapWidth - 50);
+        int treeStart2Y = rng.Next(50, mapHeight - 50);
+
+        int treeStart3X = rng.Next(50, mapWidth - 50);
+        int treeStart3Y = rng.Next(50 , mapHeight - 50);
+
+        if(noiseMapBlocked[treeStart1X,treeStart1Y] == 1)
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                treeStart1X = rng.Next(50, mapWidth - 50);
+                treeStart1Y = rng.Next(50, mapHeight - 50);
+
+                if(noiseMapBlocked[treeStart1X, treeStart1Y] == 0)
+                {
+                    i = 100000;
+                }
+            }
+        }
+        if (noiseMapBlocked[treeStart2X, treeStart2Y] == 1)
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                treeStart1X = rng.Next(50, mapWidth - 50);
+                treeStart1Y = rng.Next(50, mapHeight - 50);
+
+                if (noiseMapBlocked[treeStart1X, treeStart1Y] == 0)
+                {
+                    i = 100000;
+                }
+            }
+        }
+        if (noiseMapBlocked[treeStart3X, treeStart3Y] == 1)
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                treeStart1X = rng.Next(50, mapWidth - 50);
+                treeStart1Y = rng.Next(50, mapHeight - 50);
+
+                if (noiseMapBlocked[treeStart1X, treeStart1Y] == 0)
+                {
+                    i = 100000;
+                }
+            }
+        }
+
+        int[] treeStarts = new int[6];
+
+        treeStarts[0] = treeStart1X;
+        treeStarts[1] = treeStart1Y;
+        treeStarts[2] = treeStart2X;
+        treeStarts[3] = treeStart2Y;
+        treeStarts[4] = treeStart3X;
+        treeStarts[5] = treeStart3Y;
+
+        for (int i = 0; i < 6; i+=2)
+        {
+            int randomTree = rng.Next(0, 10);
+            architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + treeStarts[i] * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - treeStarts[i + 1] * 10), Quaternion.Euler(0,0,0), transform.parent));
+            int listCount = architectureModels.Count;
+            GameObject lastTree = architectureModels[listCount - 1];
+            lastTree.transform.localScale = new Vector3(2, 2, 2);
+            noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+        }
+
+        for(int i = 0; i < 6; i += 2)
+        {
+            for(int j = treeStarts[i] - 5; j < treeStarts[i] + 5; j++)
+            {
+                for(int k = treeStarts[i+1] - 5; k < treeStarts[i+1] + 5; k++)
+                {
+                    if (noiseMapBlocked[j, k] == 0)
+                    {
+                        int randomTree = rng.Next(0, 10);
+                        int chanceOfSpawn = 0;
+                        int listCount = 0;
+                        Debug.Log("Inside nested for loops");
+
+                        if (j == treeStarts[i] - 5 || k == treeStarts[i + 1] - 5 || j == treeStarts[i] + 5 || k == treeStarts[i + 1] + 5)
+                        {
+                            chanceOfSpawn = rng.Next(0, 100);
+                            Debug.Log(chanceOfSpawn);
+                            if (chanceOfSpawn > 80)
+                            {
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+
+                                listCount = architectureModels.Count;
+                                GameObject lastTree = architectureModels[listCount - 1];
+                                lastTree.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                                noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+                            }
+
+                        }
+                        else if (j == treeStarts[i] - 4 || k == treeStarts[i + 1] - 4 || j == treeStarts[i] + 4 || k == treeStarts[i + 1] + 4)
+                        {
+                            chanceOfSpawn = rng.Next(0, 100);
+                            Debug.Log(chanceOfSpawn);
+                            if (chanceOfSpawn > 60)
+                            {
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+
+                                listCount = architectureModels.Count;
+                                GameObject lastTree = architectureModels[listCount - 1];
+                                lastTree.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                                noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+                            }
+                        }
+                        else if (j == treeStarts[i] - 3 || k == treeStarts[i + 1] - 3 || j == treeStarts[i] + 3 || k == treeStarts[i + 1] + 3)
+                        {
+                            chanceOfSpawn = rng.Next(0, 100);
+                            Debug.Log(chanceOfSpawn);
+                            if (chanceOfSpawn > 40)
+                            {
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+
+                                listCount = architectureModels.Count;
+                                GameObject lastTree = architectureModels[listCount - 1];
+                                lastTree.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                                noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+                            }
+                        }
+                        else if (j == treeStarts[i] - 2 || k == treeStarts[i + 1] - 2 || j == treeStarts[i] + 2 || k == treeStarts[i + 1] + 2)
+                        {
+                            chanceOfSpawn = rng.Next(0, 100);
+                            Debug.Log(chanceOfSpawn);
+                            if (chanceOfSpawn > 20)
+                            {
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+
+                                listCount = architectureModels.Count;
+                                GameObject lastTree = architectureModels[listCount - 1];
+                                lastTree.transform.localScale = new Vector3(1.4f, 1.4f, 1.4f);
+                                noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+                            }
+                        }
+                        else if (j == treeStarts[i] - 1 || k == treeStarts[i + 1] - 1 || j == treeStarts[i] + 1 || k == treeStarts[i + 1] + 1)
+                        {
+                            chanceOfSpawn = rng.Next(0, 100);
+                            Debug.Log(chanceOfSpawn);
+                            if (chanceOfSpawn > 0)
+                            {
+                                architectureModels.Add(Instantiate(vegetation[randomTree], new Vector3(-mapWidth * 5 + j * 10, heightCurve.Evaluate(noiseMap[treeStarts[i], treeStarts[i + 1]]) * heightMultiplier * 10 - 0.5f, mapHeight * 5 - k * 10), Quaternion.Euler(0, 0, 0), transform.parent));
+
+                                listCount = architectureModels.Count;
+                                GameObject lastTree = architectureModels[listCount - 1];
+                                lastTree.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+                                noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 }
