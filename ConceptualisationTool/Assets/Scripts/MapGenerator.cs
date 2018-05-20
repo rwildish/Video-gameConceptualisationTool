@@ -72,9 +72,9 @@ public class MapGenerator : MonoBehaviour {
     public int housingWidth;
     [Tooltip("Determines the housing area height")]
     public int housingHeight;
-    [Tooltip("Determines the housing area start (x axis)")]
+    [Tooltip("Determines the housing area start (x axis). While this can be hard-coded this is not recommended!")]
     public int housingWidthStart;
-    [Tooltip("Determines the housing area start (y axis)")]
+    [Tooltip("Determines the housing area start (y axis). While this can be hard-coded this is not recommended!")]
     public int housingHeightStart;
     float[,] noiseMapCopy;
     int[,] noiseMapBlocked;

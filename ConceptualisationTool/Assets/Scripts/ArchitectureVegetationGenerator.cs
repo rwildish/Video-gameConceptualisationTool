@@ -16,9 +16,14 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
     float heightMultiplier;
     AnimationCurve heightCurve;
     float avgHeight;
+    float vegetationGrowth;
 
     public enum HousingLayoutMode {Detached, SemiDetached, Terraced};
+    [Tooltip("Determines the housing layout")]
     public HousingLayoutMode housingLayoutMode;
+    [Range(25,125)]
+    [Tooltip("Determines how big the vegetation will grow based on years spent growing")]
+    public int vegetationYearsGrowth;
 
     public GameObject[] houseBuildings;
     public GameObject[] commercialBuildings;
@@ -53,6 +58,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
         avgHeight = mapGenerator.GetAvgHeight();
         heightCurve = mapGenerator.meshHeightCurve;
         noiseMapBlocked = mapGenerator.GetNoiseMapBlocked();
+        vegetationGrowth = (vegetationYearsGrowth - 25) / 100;
 
         //initialising list to allow for deleting from list
         //architectureModels.Add(Instantiate(housePrefab, new Vector3(-mapWidth * 5 + housingWidthStart * 10, noiseMap[housingWidthStart, housingHeightStart] * heightMultiplier / 2 + 0.1f, mapHeight * 5 - housingHeightStart * 10), Quaternion.Euler(0, 0, 0), transform.parent));
@@ -553,6 +559,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
             listCount = architectureModels.Count;
             lastTree = architectureModels[listCount - 1];
             randomTreeScaleVariance = (float)rng.Next(18000, 22000) / 10000;
+            randomTreeScaleVariance *= (1 + vegetationGrowth);
             lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
             noiseMapBlocked[treeStarts[i], treeStarts[i + 1]] = 1;
         }
@@ -600,7 +607,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(8500, 9500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -615,7 +622,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(9000, 10000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -629,7 +636,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(9500, 10500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -643,7 +650,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(10000, 11000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -657,7 +664,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(10500, 11500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -671,7 +678,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(11000, 12000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -685,7 +692,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(11500, 12500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -699,7 +706,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(12000, 13000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -713,7 +720,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(12500, 13500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -727,7 +734,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(13000, 14000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -741,7 +748,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(13500, 14500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -755,7 +762,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(14000, 15000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -769,7 +776,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(14500, 15500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -783,7 +790,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(15000, 16000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -797,7 +804,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(15500, 16500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
 
                         }
@@ -811,7 +818,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(16000, 17000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
                         }
                         else if (j == treeStarts[i] - 3 || k == treeStarts[i + 1] - 3 || j == treeStarts[i] + 3 || k == treeStarts[i + 1] + 3)
@@ -824,7 +831,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(16500, 17500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
                         }
                         else if (j == treeStarts[i] - 2 || k == treeStarts[i + 1] - 2 || j == treeStarts[i] + 2 || k == treeStarts[i + 1] + 2)
@@ -837,7 +844,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(17000, 18000) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
                         }
                         else if (j == treeStarts[i] - 1 || k == treeStarts[i + 1] - 1 || j == treeStarts[i] + 1 || k == treeStarts[i + 1] + 1)
@@ -850,7 +857,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                 listCount = architectureModels.Count;
                                 lastTree = architectureModels[listCount - 1];
                                 randomTreeScaleVariance = (float)rng.Next(17500, 18500) / 10000;
-
+                                randomTreeScaleVariance *= (1 + vegetationGrowth);
                             }
                         }
                         else
@@ -901,6 +908,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         listCount = architectureModels.Count;
                         lastTree = architectureModels[listCount - 1];
                         randomTreeScaleVariance = (float)rng.Next(14500, 15500) / 10000;
+                        randomTreeScaleVariance *= (1 + vegetationGrowth);
                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                         noiseMapBlocked[i, j] = 1;
 
@@ -940,6 +948,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                         listCount = architectureModels.Count;
                                         lastTree = architectureModels[listCount - 1];
                                         randomTreeScaleVariance = (float)rng.Next(8500, 12500) / 10000;
+                                        randomTreeScaleVariance *= (1 + vegetationGrowth);
                                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                                         noiseMapBlocked[i + k, j + l] = 1;
                                         Debug.Log("Random tree chance");
@@ -992,6 +1001,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         listCount = architectureModels.Count;
                         lastTree = architectureModels[listCount - 1];
                         randomTreeScaleVariance = (float)rng.Next(8500, 11500) / 10000;
+                        randomTreeScaleVariance *= (1 + vegetationGrowth);
                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                         flowerMap[i, j] = 1;
 
@@ -1025,6 +1035,7 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                         listCount = architectureModels.Count;
                                         lastTree = architectureModels[listCount - 1];
                                         randomTreeScaleVariance = (float)rng.Next(8500, 11500) / 10000;
+                                        randomTreeScaleVariance *= (1 + vegetationGrowth);
                                         lastTree.transform.localScale = new Vector3(randomTreeScaleVariance, randomTreeScaleVariance, randomTreeScaleVariance);
                                         flowerMap[i + k, j + l] = 1;
                                     }
@@ -1045,6 +1056,14 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
         if (architectureModels.Count > 0)
             foreach (GameObject m in architectureModels)
                 DestroyImmediate(m);
+    }
+
+    void OnValidate()
+    {
+        if(vegetationYearsGrowth < 25)
+        {
+            vegetationYearsGrowth = 25;
+        }
     }
 
 }
