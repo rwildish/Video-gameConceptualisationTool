@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class MeshGenerator {
-
+    //Perlin Noise Mesh Generation
 	public static MeshData GenerateMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve)
     {
         int width = heightMap.GetLength(0);
@@ -71,7 +71,7 @@ public class MeshData
         triangles[triangleIndex + 2] = c;
         triangleIndex += 3;
     }
-
+    //flatshading option for users
     public void FlatShading()
     {
         Vector3[] flatShadedVertices = new Vector3[triangles.Length];

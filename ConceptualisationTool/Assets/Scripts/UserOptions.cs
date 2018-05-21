@@ -52,7 +52,7 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.x = 0;
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 20.0f;
-            mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
+            //mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
             userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
             
@@ -68,7 +68,7 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.x = 0;
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 20.0f;
-            mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(mapGenerator.regions[1].height, 0.0f), new Keyframe(1f, 0.1f));
+            //mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(mapGenerator.regions[1].height, 0.0f), new Keyframe(1f, 0.1f));
             userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
         }
@@ -83,7 +83,7 @@ public class UserOptions : MonoBehaviour {
             mapGenerator.offset.x = 0;
             mapGenerator.offset.y = 0;
             mapGenerator.meshHeightMultiplier = 10.0f;
-            mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
+            //mapGenerator.meshHeightCurve = new AnimationCurve(new Keyframe(mapGenerator.regions[1].height, 0f), new Keyframe(1f, 1f));
             userAdvancedOptions.UpdateVariables();
             mapGenerator.GenerateMap();
         }

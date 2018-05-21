@@ -583,8 +583,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         randomTreeScaleVariance = 0;
                         Debug.Log("Inside nested for loops");
 
-                        treePositionVarianceX = rng.NextDouble() * 3;
-                        treePositionVarianceY = rng.NextDouble() * 3;
+                        treePositionVarianceX = rng.NextDouble();
+                        treePositionVarianceY = rng.NextDouble();
                         positionPosNegChance = rng.Next(0, 100);
                         if (positionPosNegChance < 50)
                         {
@@ -891,8 +891,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         treeRotation = (float)randomTreeRotation;
                         randomTreeScaleVariance = 0;
 
-                        treePositionVarianceX = rng.NextDouble() * 3;
-                        treePositionVarianceY = rng.NextDouble() * 3;
+                        treePositionVarianceX = rng.NextDouble();
+                        treePositionVarianceY = rng.NextDouble();
                         positionPosNegChance = rng.Next(0, 100);
                         if (positionPosNegChance < 50)
                         {
@@ -931,8 +931,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                         randomTreeScaleVariance = 0;
                                         //Debug.Log("Inside nested for loops");
 
-                                        treePositionVarianceX = rng.NextDouble() * 3;
-                                        treePositionVarianceY = rng.NextDouble() * 3;
+                                        treePositionVarianceX = rng.NextDouble();
+                                        treePositionVarianceY = rng.NextDouble();
                                         positionPosNegChance = rng.Next(0, 100);
                                         if (positionPosNegChance < 50)
                                         {
@@ -960,16 +960,6 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                 }
             }
         }
-
-        
-        //for (int i = 0; i < mapWidth; i++)
-        //{
-        //    for (int j = 0; j < mapHeight; j++)
-        //    {
-        //        flowerMap[i, j] = 0;
-        //    }
-        //}
-
         for (int i = 3; i < mapWidth - 3; i++)
         {
             for (int j = 3; j < mapHeight - 3; j++)
@@ -984,8 +974,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                         randomTreeRotation = rng.NextDouble() * 360;
                         treeRotation = (float)randomTreeRotation;
 
-                        treePositionVarianceX = rng.NextDouble() * 3;
-                        treePositionVarianceY = rng.NextDouble() * 3;
+                        treePositionVarianceX = rng.NextDouble();
+                        treePositionVarianceY = rng.NextDouble();
                         positionPosNegChance = rng.Next(0, 100);
                         if (positionPosNegChance < 50)
                         {
@@ -1018,8 +1008,8 @@ public class ArchitectureVegetationGenerator : MonoBehaviour
                                         randomTreeRotation = rng.NextDouble() * 360;
                                         treeRotation = (float)randomTreeRotation;
 
-                                        treePositionVarianceX = rng.NextDouble() * 3;
-                                        treePositionVarianceY = rng.NextDouble() * 3;
+                                        treePositionVarianceX = rng.NextDouble();
+                                        treePositionVarianceY = rng.NextDouble();
                                         positionPosNegChance = rng.Next(0, 100);
                                         if (positionPosNegChance < 50)
                                         {

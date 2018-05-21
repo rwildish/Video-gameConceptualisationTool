@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public static class TextureGenerator {
-
+    //colour map texture
 	public static Texture2D TextureColorMap(Color[] colorMap, int width, int height)
     {
         Texture2D texture = new Texture2D(width, height);
@@ -12,7 +12,7 @@ public static class TextureGenerator {
         texture.Apply();
         return texture;
     }
-
+    //height map texture
     public static Texture2D TextureHeightMap(float[,] heightMap)
     {
         int width = heightMap.GetLength(0);

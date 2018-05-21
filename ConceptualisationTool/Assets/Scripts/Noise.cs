@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public static class Noise{
-
+    //noise map generation for Perlin noise terrain
 	public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];

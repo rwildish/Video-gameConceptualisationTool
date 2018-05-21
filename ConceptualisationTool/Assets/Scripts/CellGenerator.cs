@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CellGenerator : MonoBehaviour {
-
+    //Cellular Automata and Marching Squares
     public SquareGrid squareGrid;
     public MeshFilter walls;
     List<Vector3> vertices;

@@ -49,7 +49,7 @@ public class MapGenerator : MonoBehaviour {
     public bool useFlatShading;
     [Tooltip("Determines the multiplied height of the mesh")]
     public float meshHeightMultiplier;
-    [Tooltip("Allows for the flatness of water, whilst allowing other areas to gain height (Mesh only)")]
+    [Tooltip("Allows for the flatness of water, whilst allowing other areas to gain height (Mesh only). (Recommended) Please save the scene and project before changing this curve.")]
     public AnimationCurve meshHeightCurve;
     [Tooltip("Determines whether to auto update or not")]
     public bool autoUpdate;

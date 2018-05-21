@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class FalloffGenerator{
-
+    //falloff map generator for falloff option, making an island 
 	public static float[,] GenerateFalloffMap(int width, int height)
     {
         float[,] map = new float[width, height];
